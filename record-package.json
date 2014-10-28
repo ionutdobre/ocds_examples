@@ -1,0 +1,25 @@
+{
+    "uri": "http://contractawards.eu/ocds/api/record-package/{filters}",
+    "publisher": {
+        "name": "Development Gateway"
+    },
+    "license": "http://opensource.org/licenses/MIT",
+    "publishedDate": "2006-09-14T04:28:58-0400",
+    "packages": [
+        "http://contractawards.eu/ocds/api/release-package/releaseID1",
+        "http://contractawards.eu/ocds/api/release-package/releaseID2",
+        "http://contractawards.eu/ocds/api/release-package/releaseID3"
+    ],
+    "records": [
+        {
+            "ocid": "1234-5678",
+            "releases": [
+                {
+                    "name": "releaseID1",
+                    "uid": "releaseID",
+                    "uri": "http://contractawards.eu/ocds/api/release/releaseID1"
+                }
+            ]
+        }
+    ]
+}
