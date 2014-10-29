@@ -1,23 +1,60 @@
 {
-    "uri": "http://contractawards.eu/ocds/api/record-package/{filters}",
+    // the URL that is used to get this record-package; it should contain the filters
+    "uri": "http://contractawards.eu/open-contracting/api/v1/record-package/{filters}",
     "publisher": {
         "name": "Development Gateway"
     },
+    // do we need to display a license? if yes, what license should we use?
     "license": "http://opensource.org/licenses/MIT",
     "publishedDate": "2006-09-14T04:28:58-0400",
+    // A list of URIs of all the release packages that were used to create this record package.
+    // basically the user ca recreate the "records" field from this URIs
     "packages": [
-        "http://contractawards.eu/ocds/api/release-package/releaseID1",
-        "http://contractawards.eu/ocds/api/release-package/releaseID2",
-        "http://contractawards.eu/ocds/api/release-package/releaseID3"
+        "http://contractawards.eu/open-contracting/api/v1/release-package/releaseID1",
+        "http://contractawards.eu/open-contracting/api/v1/release-package/releaseID2",
+        "http://contractawards.eu/open-contracting/api/v1/release-package/releaseID3"
     ],
+    // All the records for this data package.
     "records": [
+        // a record it's a list of objects that identify the releases associated with this Open Contracting ID.
+        // in the following example the open contracting id is '1234-1111'
         {
-            "ocid": "1234-5678",
+            "ocid": "1234-1111",
             "releases": [
+                // A release could be displayed in 2 ways:
+                //      *  information to uniquely identify the release - using a URI
+                //      *  actually embed the release content
+                // in the following example I used the first option; for the second option the content of the following object will be the content of the release.json file
                 {
                     "name": "releaseID1",
                     "uid": "releaseID",
-                    "uri": "http://contractawards.eu/ocds/api/release/releaseID1"
+                    "uri": "http://contractawards.eu/open-contracting/api/v1/release/releaseID1"
+                }
+            ]
+        },
+        // another record, this info could also be obtain going to the second URL from the 'packages' field:
+        //          => http://contractawards.eu/open-contracting/api/v1/release-package/releaseID2
+        {
+            "ocid": "1234-2222",
+            "releases": [
+                // the actual list of releases
+                // in our case since we are tracking only the awarding process it will be only one release
+                {
+                    "name": "releaseID2",
+                    "uid": "releaseID",
+                    "uri": "http://contractawards.eu/open-contracting/api/v1/release/releaseID2"
+                }
+            ]
+        },
+        // the last record from our example
+        {
+            "ocid": "1234-3333",
+            "releases": [
+                // the list of releases
+                {
+                    "name": "releaseID3",
+                    "uid": "releaseID",
+                    "uri": "http://contractawards.eu/open-contracting/api/v1/release/releaseID3"
                 }
             ]
         }

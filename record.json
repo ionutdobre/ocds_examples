@@ -1,10 +1,17 @@
 {
+    // this is the content of a particular record from the record-package file
+    // a record it's a list of objects that identify the releases associated with this Open Contracting ID.
+    // in the following example the open contracting id is '1234-5678'
     "ocid": "1234-5678",
     "releases": [
+        // A release could be displayed in 2 ways:
+        //      *  information to uniquely identify the release - using a URI
+        //      *  actually embed the release content
+        // in the following example I used the first option; for the second option the content of the following object will be the content of the release.json file
         {
             "name": "releaseID1",
             "uid": "releaseID",
-            "uri": "http://contractawards.eu/ocds/api/release/releaseID1"
+            "uri": "http://contractawards.eu/open-contracting/api/v1/release/releaseID1"
         }
     ]
 }

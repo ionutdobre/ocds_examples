@@ -1,10 +1,14 @@
 {
-    "uri": "http://contractawards.eu/ocds/api/release-package/releaseID1",
+    // the URL that is used to get this record-package; it should contain the releaseID
+    "uri": "http://contractawards.eu/open-contracting/api/v1/release-package/releaseID1",
     "publishedDate": "2006-09-14T04:28:58-0400",
     "publisher": {
         "name": "Development Gateway"
     },
+    // do we need to display a license? if yes, what license should we use?
     "license": "http://opensource.org/licenses/MIT",
+    // array of releases associated with this release package
+    // this the exact content of the 'release.json' file
     "releases": [{
         "ocid": "1234-5678",
         "releaseID": "releaseID-1234-5678",
@@ -12,6 +16,7 @@
         "releaseTag": "awardNotice",
         "language": "en",
         "formationType": "tender",
+        // buyer information
         "buyer": {
             "id": {
                 "name": "CONSEIL GÉNÉRAL DE L'YONNE",
@@ -43,6 +48,7 @@
             },
             "numberOfBids": 3
         },
+        // the list of contract awards, the list can have more that 1 entry if there are multiple suppliers
         "awards": [{
             "awardID": "1129358",
             "notice": {
