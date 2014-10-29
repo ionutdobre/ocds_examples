@@ -1,5 +1,5 @@
 {
-    "uri": "http://contractawards.eu/ocds/api/release-package/releaseID1",
+    "uri": "http://contractawards.eu/open-contracting/api/v1/release-package/releaseID1",
     "publishedDate": "2006-09-14T04:28:58-0400",
     "publisher": {
         "name": "Development Gateway"
