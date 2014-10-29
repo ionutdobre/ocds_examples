@@ -1,0 +1,10 @@
+{
+    "ocid": "1234-5678",
+    "releases": [
+        {
+            "name": "releaseID1",
+            "uid": "releaseID",
+            "uri": "http://www.contractawards.eu/open-contracting/api/v1/release/releaseID1"
+        }
+    ]
+}

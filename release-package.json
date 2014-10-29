@@ -1,0 +1,77 @@
+{
+    "uri": "http://www.contractawards.eu/open-contracting/api/v1/release-package/releaseID1",
+    "publishedDate": "2006-09-14T04:28:58-0400",
+    "publisher": {
+        "name": "Development Gateway"
+    },
+    "license": "http://opensource.org/licenses/MIT",
+    "releases": [{
+        "ocid": "1234-5678",
+        "releaseID": "releaseID-1234-5678",
+        "releaseDate": "2006-09-14T04:28:58-0400",
+        "releaseTag": "awardNotice",
+        "language": "en",
+        "formationType": "tender",
+        "buyer": {
+            "id": {
+                "name": "CONSEIL GÉNÉRAL DE L'YONNE",
+                "uid": "6490828",
+                "uri": "http://www.dgmarket.com/tenders/adminShowBuyer.do?buyerId=6490828"
+            },
+            "address": {
+                "locality": "Paris",
+                "region": "Paris",
+                "country-name": "France"
+            }
+        },
+        "tender": {
+            "tenderID": "1219083",
+            "notice": {
+                "id": "1234-5678",
+                "uri": "http://www.dgmarket.com/tenders/np-notice.do?noticeId=1219083",
+                "publishedDate": "2006-03-21T00:00:00-0500"
+            },
+            "itemsToBeProcured": [{
+                "description": "Construction work",
+                "classificationScheme": "CPV",
+                "classificationID": "45000000",
+                "classificationDescription": "Construction work"
+            }],
+            "totalValue": {
+                "amount": 100000,
+                "currency": "EUR"
+            },
+            "numberOfBids": 3
+        },
+        "awards": [{
+            "awardID": "1129358",
+            "notice": {
+                "id": "1234-5678",
+                "uri": "http://www.dgmarket.com/tenders/np-notice.do?noticeId=1219083",
+                "publishedDate": "2006-03-21T00:00:00-0500"
+            },
+            "awardValue": {
+                "amount": 100000,
+                "currency": "EUR"
+            },
+            "suppliers": [{
+                "id": {
+                    "name": "Divers organismes",
+                    "uid": "123",
+                    "uri": "http://www.contractawards.eu/#!supplier=Divers+organismes"
+                },
+                "address": {
+                    "locality": "Bucharest",
+                    "region": "Ilfov",
+                    "country-name": "Romania"
+                }
+            }],
+            "itemsAwarded": [{
+                "description": "Construction work",
+                "classificationScheme": "CPV",
+                "classificationID": "45000000",
+                "classificationDescription": "Construction work"
+            }]
+        }]
+    }]
+}
