@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Open Contracting Data Standard API by ionutdobre</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Open Contracting Data Standard API</h1>
+        <h2></h2>
+        <a href="https://github.com/ionutdobre/ocds_examples" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a name="ocds-api" class="anchor" href="#ocds-api"><span class="octicon octicon-link"></span></a>OCDS API</h1>
+
+<p><strong>Open Contracting Data Standard</strong> aims to allow information to be shared as structured data and to provide a transparent way to analyze all the phases of a contract from planning to completion. By creating the <em>OCDS API</em> we are offering to developers the possibility to create easy to interpret visual reports and application that can identify trends in public contracts.</p>
+
+<p>This document provides a description of the APIs and examples of their use.</p>
+
+<ol>
+<li>API conventions</li>
+<li>Records API</li>
+<li>Releases API</li>
+<li>Pagination</li>
+<li>Metadata API</li>
+<li>Versioning</li>
+<li>Errors</li>
+</ol>
+
+<h2>
+<a name="1-api-conventions" class="anchor" href="#1-api-conventions"><span class="octicon octicon-link"></span></a>1. API Conventions</h2>
+
+<p><strong>Authentication</strong>
+Using the OCDS API doesn’t require any kind of authentication, users can send as many request as they want, the only limitation will be the number of records returned; in this way we encourage developers to use pagination in order to iterate throw all of the data.</p>
+
+<p><strong>JSON Callbacks</strong></p>
+
+<p>The <strong>OCDS API</strong> is developer-friendly so it’s explorable via a browser address bar for testing purposes, but also in a real application you can use AJAX or JSON-P callbacks in order to query the system and <em>consume</em> the response:</p>
+
+<pre><code>$.ajax({
+    type: 'GET',
+    url:  'http://www.contractawards.eu/open-contracting/api/v1/years',
+    success: function(response) {
+        console.log(response.hits);
+    }
+});
+</code></pre>
+
+<p>All the request should have the type <strong>GET</strong>.</p>
+
+<h2>
+<a name="2-records-api" class="anchor" href="#2-records-api"><span class="octicon octicon-link"></span></a>2. Records API</h2>
+
+<p><strong>Limiting release content that is returned by the API</strong></p>
+
+<p><strong>Open Contracting Data Standard</strong> allows a release to be displayed in 2 ways in a record package:</p>
+
+<ul>
+<li>as a URI having a unique releaseID that contains the actual information about the release</li>
+<li>embed the actual release contend (the same content that can be obtain using the first method, but with this method the response  size will be much smaller</li>
+</ul>
+
+<p>Having this in consideration and the fact that an API consumer doesn’t always need the full representation of a release the user can use the <em>embed=true</em> parameter in order to minimize network traffic and speed up the usage of the <strong>Records API</strong></p>
+
+<p>For example, the following request would retrieve just the basic information about a record package but it will also have the releases URI that can be further used to retrieve the releases content:</p>
+
+<pre><code>GET http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2012
+
+{
+    "uri": "http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2012”,
+    "publisher": {
+        "name": "Development Gateway"
+    },
+    "license": "http://opensource.org/licenses/MIT",
+    "publishedDate": "2012-09-14T04:28:58-0400",
+    "packages": [
+        "http://www.contractawards.eu/open-contracting/api/v1/release-package/releaseID1"
+    ],
+    "records": [
+        {
+            "ocid": "1234-5678",
+            "releases": [
+                {
+                    "name": "releaseID1",
+                    "uid": "releaseID",
+                    "uri": "http://www.contractawards.eu/open-contracting/api/v1/release/releaseID1"
+                }
+            ]
+        }
+    ]
+}
+</code></pre>
+
+<h2>
+<a name="3-releases-api" class="anchor" href="#3-releases-api"><span class="octicon octicon-link"></span></a>3. Releases API</h2>
+
+<p>This is the API that can be used to obtain information about OCDS releases. It’s build to be flexible and with the help of the filters users can slice the data and drill down the results.</p>
+
+<h2>
+<a name="4-pagination" class="anchor" href="#4-pagination"><span class="octicon octicon-link"></span></a>4. Pagination</h2>
+
+<h2>
+<a name="5-metadata-api" class="anchor" href="#5-metadata-api"><span class="octicon octicon-link"></span></a>5. Metadata API</h2>
+
+<p><strong>Getting filters metadata</strong></p>
+
+<p>This API is used to get information about the <em>filters</em> that can be used with the <strong>Records API</strong></p>
+
+<p><strong>Basic call and parameters</strong></p>
+
+<pre><code>GET /open-contracting/api/v1/&lt;dataset&gt;
+</code></pre>
+
+<p>Calls will return information about the <em>dataset</em> and all valid values that can be used. If a value is not returned, for example year 2000, this means that we don’t have contracts published in 2000.</p>
+
+<p>Possible values for <em>dataset</em>:</p>
+
+<ul>
+<li>
+<strong>years</strong> - returns an array of valid years</li>
+<li>
+<strong>buyerCountries</strong> - returns all buyer countries</li>
+<li>
+<strong>supplierCountries</strong> - returns supplier countries</li>
+<li>
+<strong>sectors</strong> - returns the main sector of the contract</li>
+<li>
+<strong>procedures</strong> - returns the procedures (Service contract, Works)</li>
+<li>
+<strong>awardCriteria</strong> - returns the awarding criteria (Lowest price, The most economic tender)</li>
+</ul>
+
+<p><strong>Response example</strong></p>
+
+<pre><code>GET http://www.contractawards.eu/open-contracting/api/v1/years
+
+{
+  hits: [2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013]
+}
+</code></pre>
+
+<p>The above response will be available in a web browser, but if the user uses ajax, then a possible way to get all the years that can be used to filter the data will be:</p>
+
+<pre><code>$.ajax({
+    type: 'GET',
+    url: 'http://www.contractawards.eu/open-contracting/api/v1/years',
+    success: function(response) {
+        console.log(response.hits);
+    }
+});
+</code></pre>
+
+<h2>
+<a name="6-versioning" class="anchor" href="#6-versioning"><span class="octicon octicon-link"></span></a>6. Versioning</h2>
+
+<p>Change is inevitable so we decided to implement a versioning API that will help us to iterate faster and prevent invalid requests. This will also allow us to easily adopt new version of the OCDS standard and continue to offer old API versions for a period of time. The version are identified as /<strong>api/v1</strong>/, <strong>api/v2</strong>/ and so on.</p>
+
+<h2>
+<a name="7-errors" class="anchor" href="#7-errors"><span class="octicon octicon-link"></span></a>7. Errors</h2>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/ionutdobre/ocds_examples/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/ionutdobre/ocds_examples/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/ionutdobre/ocds_examples"></a> is maintained by <a href="https://github.com/ionutdobre">ionutdobre</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
