@@ -4,7 +4,7 @@
         {
             "name": "releaseID1",
             "uid": "releaseID",
-            "uri": "http://contractawards.eu/open-contracting/api/v1/release/releaseID1"
+            "uri": "http://www.contractawards.eu/open-contracting/api/v1/release/releaseID1"
         }
     ]
 }
