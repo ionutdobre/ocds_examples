@@ -52,16 +52,17 @@ http://www.contractawards.eu/open-contracting/api/v1/record-package?<filters>
 The following parameters (```filters```) are supported:
 * ```supplier``` - this represents the supplier name; Ex: *Acciona infraestructuras*
 * ```buyer``` - this represents the buyer name; Ex: *ADMINISTRADOR DE INFRAESTRUCTURAS FERROVIARIAS*
-* ```sector``` - the name of the sector; Ex: *Transport services* 
+* ```sector``` - the name of the sector; Ex: *Transport services*
 * ```year``` - Ex: *2012*
 * ```procedure``` - Ex: *Service contract*
 * ```awardCriteria``` - Ex: *Lowest price*
 * ```buyerCountry``` - Ex: *Germany*
 * ```supplierCountry``` - Ex: *Italy*
 
-Please note that the last 6 criteria: *sector*, *year*, *procedure*, *awardCriteria*, *buyerCountry* and *supplierCountry* need to be valid. You can check if one of these criteria is valid by invoking the **Metadata API**.
+Please note that the last 6 criteria: ```sector```, ```year```, ```procedure```, ```awardCriteria```, ```buyerCountry``` and ```supplierCountry``` need to be valid. You can check if one of these criteria is valid by invoking the **Metadata API**.
 
 **Request pagination**
+
 In order to limit the response size and to allow a better manipulation of the data each request accepts the following parameters:
 * ```page``` – page number
 * ```pageSize``` – number of records per page; the default value is 100 and it can not be greater that 1000
@@ -69,22 +70,26 @@ In order to limit the response size and to allow a better manipulation of the da
 ```
 http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2008&buyerCountry=Germany&page=10&pageSize=10
 ```
+
+In the above example you will get the 10th page and 10 records.
+
 ```
 http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2008&supplierCountry=France&page=1&pageSize=50
 ```
+
 ```
 http://www.contractawards.eu/open-contracting/api/v1/record-package?sector=Construction work&procedure=Service contract&year=2012&page=1&pageSize=1000
 ```
 
 ### Rules for invoking the Filter API
-1.	Supplier name and buyer name reset all other parameters, in other words if one of the supplier or buyer parameter is present all other parameters will be ignored. 
-2.	All other parameters (sector, year, procedure, awardCriteria, buyerCountry, supplierCountry) can be combined in any order with the condition that at least two criteria from the aforementioned list be used
-3.	The HTTP Method for all request should be GET
+1.	Supplier name and buyer name reset all other parameters, in other words if one of the ```supplier``` or ```buyer``` parameter is present all other parameters will be ignored.
+2.	All other parameters (```sector```, ```year```, ```procedure```, ```awardCriteria```, ```buyerCountry```, ```supplierCountry```) can be combined in any order with the condition that at least two criteria from the aforementioned list be used
+3.	The *HTTP Method* for all request should be **GET**
 
 ### Limiting release content that is returned by the API
 **Open Contracting Data Standard** allows a release to be displayed in 2 ways in a record package:
-* as a URI having a unique releaseID that contains the actual information about the release
-* embed the actual release contend(the same content that can be obtain using the first method, but with this method the response  size will be much smaller
+* as a URI having a unique *releaseID* that contains the actual information about the release
+* embed the actual release contend(the same content that can be obtain using the first method), but with this method the response size will be much larger
 
 Having this in consideration and the fact that an API consumer doesn’t always need the full representation of a release the user can use the ```embed=true``` parameter in order to minimize network traffic and speed up the usage of the **Records API**.
 
@@ -120,14 +125,24 @@ GET http://www.contractawards.eu/open-contracting/api/v1/record-package?year=201
 
 ### Getting a single record
 
-Each record has a unique Open Contracting ID called ```ocid``` (http://ocds.open-contracting.org/standard/r/0__3__3/#conceptual-model) and sometimes it is useful not to see the big picture but only the informations about a particular record so the user can do that by using the following API:
+Each record has a unique **Open Contracting ID** called ```ocid``` (http://ocds.open-contracting.org/standard/r/0__3__3/#conceptual-model) and sometimes it is useful not to see the big picture but only the informations about a particular record so the user can do that by using the following API:
 
 ```
 http://www.contractawards.eu/open-contracting/api/v1/record?recordId=<ocid>
 ```
 
 ### Pretty print format
-By default the API provides pretty printing of the JSON output because it’s more approachable but in a production application the user can reduce the cost of the data transfer by using the parameter ```?pretty=false``` in order to remove all the white spaces from the response.
+By default the API provides pretty printing of the JSON output because it’s more approachable but in a production application the user can reduce the cost of the data transfer by using the parameter ```pretty=false``` in order to remove all the white spaces from the response.
+
+### Records API Response
+
+The response fields for the package records are explained in more detailed below
+
+* ```uri``` - the URI of this records package
+* ```publisher``` - information to uniquely identify the publisher of this package
+* ```publishedDate``` - the date that this package was published.
+* ```packages``` - a list of URIs of all the release packages that were used to create this record package
+* ```records``` - the records for this data package
 
 ## 3. Releases API
 
@@ -149,11 +164,69 @@ It can be used to get only one release content with the given ```id```.
 
 **Pretty format** - the **Release API** supports the same ```pretty=false``` parameter as **Records API** in order to get a white-space compressed response.
 
+### Release API Response
+
+The response fields for a release are explained in more detailed below
+
+* ```ocid``` - A unique identifier that identifies the unique Open Contracting Process
+* ```releaseID``` - A unique identifier that identifies this release
+* ```releaseDate``` - The date this information is released, it may well be the same as the parent publishedDate
+* ```releaseTag``` - A tag that helps to identify the type of data in the dataset (it should be *awardNotice*)
+* ```language``` - Specifies the default language of the data
+* ```formationType``` - String specifying the type of formation process used for this contract(it should be *tender*)
+* ```buyer``` - The buyer is the entity whose budget will be used to purchase the goods.
+	* **id**
+		* *name*
+		* *uid*
+		* *uri*
+	* **address** - An Address following the convention of http://microformats.org/wiki/hcard
+		* *locality*
+		* *region*
+		* *country-name*
+* ```tender``` - The activities undertaken in order to enter into a contract.
+	* **tenderID** - TenderID should always be the same as the OCID.
+	* **notice** - The notice is a published document that notifies the public at various stages of the contracting process
+		* *id*
+		* *uri*
+		* *publishedDate*
+	* **itemsToBeProcured** - The goods and services to be purchased
+		* *description*
+		* *classificationScheme*
+		* *classificationID*
+		* *classificationDescription*
+	* **totalValue** - The total estimated value of the procurement
+		* *amount*
+		* *currency*
+	* **numberOfBids** - The number of unique bidders who participated in the tender
+* ```awards``` - Information from the award phase of the contracting process
+	* **awardID** - The identifier for this award
+	* **notice**
+		* *id*
+		* *uri*
+		* *publishedDate*
+	* **awardValue** - The total value of this award
+		* *amount*
+		* *currency*
+	* **suppliers** - The suppliers awarded this award
+		* *id*
+			* *name*
+			* *uid*
+			* *uri*
+		* *address*
+			* *locality*
+			* *region*
+			* *country-name*
+	* **itemsAwarded** - The goods and services awarded in this award, broken into line items wherever possible
+		* *description*
+		* *classificationScheme*
+		* *classificationID*
+		* *classificationDescription*
 
 ## 4. Metadata API
 
 **Getting filters metadata**
-This API is used to get information about the *filters* that can be used with the **Records API**
+
+This API is used to get information about the ```filters``` that can be used with the **Records API**
 
 ### Basic call and parameters
 ```
@@ -208,7 +281,7 @@ In case of an error(client issue of server issue) we will return a response with
     "url": "http://www.contractawards.eu/open-contracting/api/v1/release?id=156809-2006"
    }
   ]
-} 
+}
 ```
 or
 
@@ -319,7 +392,3 @@ In order to have a complete picture on the response that you can get by calling 
     ]
 }
 ```
-
-
-
-
