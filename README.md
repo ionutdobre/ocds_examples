@@ -5,23 +5,20 @@ OCDS API
 
 This document provides a description of the APIs and examples of their use.
 
-
 1. API conventions
 2. Records API
 3. Releases API
-4. Pagination
-5. Metadata API
-6. Versioning
-7. Errors
-
+4. Metadata API
+5. Versioning
+6. Errors
+7. Possible response
 
 ## 1. API Conventions
 
-**Authentication**
+### Authentication
 Using the OCDS API doesn’t require any kind of authentication, users can send as many request as they want, the only limitation will be the number of records returned; in this way we encourage developers to use pagination in order to iterate throw all of the data.
 
-**JSON Callbacks**
-
+### JSON Callbacks
 The **OCDS API** is developer-friendly so it’s explorable via a browser address bar for testing purposes, but also in a real application you can use AJAX or JSON-P callbacks in order to query the system and *consume* the response:
 
 ```
@@ -36,21 +33,65 @@ $.ajax({
 
 All the request should have the type **GET**.
 
+### Definitions from OCDS
+Information about an Open Contracting Process may accumulate over time. As a result, the Open Contracting Data Standard provides for two kinds of data:
+1. **Contracting releases** - each release provides information pertaining to a particular stage in the contracting process - such as tender notices, award notices, or details of a finalized contract.
+2. **Contracting record** - A contracting record provides a snapshot of all the key elements of a unique contracting process, including its planning, formation, performance and completion.
+
+Both **contracting releases** and **contracting records** are provided within data packages, containing meta-data about the publisher, publication data and licensing information.
+
 ## 2. Records API
 
+This API can be used to generate record packages or to retrieve individual *record* information. It is build to be flexible and with the help of the *filters* users can slice the data and drill down the results.
 
-**Limiting release content that is returned by the API**
+### Basic call and parameters
 
+```
+http://www.contractawards.eu/open-contracting/api/v1/record-package?<filters>
+```
+The following parameters (```filters```) are supported:
+* ```supplier``` - this represents the supplier name; Ex: *Acciona infraestructuras*
+* ```buyer``` - this represents the buyer name; Ex: *ADMINISTRADOR DE INFRAESTRUCTURAS FERROVIARIAS*
+* ```sector``` - the name of the sector; Ex: *Transport services* 
+* ```year``` - Ex: *2012*
+* ```procedure``` - Ex: *Service contract*
+* ```awardCriteria``` - Ex: *Lowest price*
+* ```buyerCountry``` - Ex: *Germany*
+* ```supplierCountry``` - Ex: *Italy*
+
+Please note that the last 6 criteria: *sector*, *year*, *procedure*, *awardCriteria*, *buyerCountry* and *supplierCountry* need to be valid. You can check if one of these criteria is valid by invoking the **Metadata API**.
+
+**Request pagination**
+In order to limit the response size and to allow a better manipulation of the data each request accepts the following parameters:
+* ```page``` – page number
+* ```pageSize``` – number of records per page; the default value is 100 and it can not be greater that 1000
+
+```
+http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2008&buyerCountry=Germany&page=10&pageSize=10
+```
+```
+http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2008&supplierCountry=France&page=1&pageSize=50
+```
+```
+http://www.contractawards.eu/open-contracting/api/v1/record-package?sector=Construction work&procedure=Service contract&year=2012&page=1&pageSize=1000
+```
+
+### Rules for invoking the Filter API
+1.	Supplier name and buyer name reset all other parameters, in other words if one of the supplier or buyer parameter is present all other parameters will be ignored. 
+2.	All other parameters (sector, year, procedure, awardCriteria, buyerCountry, supplierCountry) can be combined in any order with the condition that at least two criteria from the aforementioned list be used
+3.	The HTTP Method for all request should be GET
+
+### Limiting release content that is returned by the API
 **Open Contracting Data Standard** allows a release to be displayed in 2 ways in a record package:
 * as a URI having a unique releaseID that contains the actual information about the release
-* embed the actual release contend (the same content that can be obtain using the first method, but with this method the response  size will be much smaller
+* embed the actual release contend(the same content that can be obtain using the first method, but with this method the response  size will be much smaller
 
-Having this in consideration and the fact that an API consumer doesn’t always need the full representation of a release the user can use the *embed=true* parameter in order to minimize network traffic and speed up the usage of the **Records API**
+Having this in consideration and the fact that an API consumer doesn’t always need the full representation of a release the user can use the ```embed=true``` parameter in order to minimize network traffic and speed up the usage of the **Records API**.
 
 For example, the following request would retrieve just the basic information about a record package but it will also have the releases URI that can be further used to retrieve the releases content:
 
 ```
-GET http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2012
+GET http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2012&embed=true
 
 {
     "uri": "http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2012”,
@@ -77,36 +118,59 @@ GET http://www.contractawards.eu/open-contracting/api/v1/record-package?year=201
 }
 ```
 
+### Getting a single record
+
+Each record has a unique Open Contracting ID called ```ocid``` (http://ocds.open-contracting.org/standard/r/0__3__3/#conceptual-model) and sometimes it is useful not to see the big picture but only the informations about a particular record so the user can do that by using the following API:
+
+```
+http://www.contractawards.eu/open-contracting/api/v1/record?recordId=<ocid>
+```
+
+### Pretty print format
+By default the API provides pretty printing of the JSON output because it’s more approachable but in a production application the user can reduce the cost of the data transfer by using the parameter ```?pretty=false``` in order to remove all the white spaces from the response.
+
 ## 3. Releases API
 
-This is the API that can be used to obtain information about OCDS releases. It’s build to be flexible and with the help of the filters users can slice the data and drill down the results.
+This API can be used to obtain informations about a package release or a particular release. It can be useful to obtain more  information about a particular stage in the contracting process or if the user is using the ```embed=true``` parameter in the **Records API** and then he wants to get the content of the releases.
 
-## 4. Pagination
+### Basic call and parameters
 
-## 5. Metadata API
+```
+http://www.contractawards.eu/open-contracting/api/v1/release-package?releaseId=<id>
+```
+
+It can be used to get the release package with the given ```id```.
+
+```
+http://www.contractawards.eu/open-contracting/api/v1/release?releaseId=<id>
+```
+
+It can be used to get only one release content with the given ```id```.
+
+**Pretty format** - the **Release API** supports the same ```pretty=false``` parameter as **Records API** in order to get a white-space compressed response.
+
+
+## 4. Metadata API
 
 **Getting filters metadata**
-
 This API is used to get information about the *filters* that can be used with the **Records API**
 
-**Basic call and parameters**
-
+### Basic call and parameters
 ```
 GET /open-contracting/api/v1/<dataset>
 ```
 
-Calls will return information about the *dataset* and all valid values that can be used. If a value is not returned, for example year 2000, this means that we don’t have contracts published in 2000.
+Calls will return information about the ```dataset``` and all valid values that can be used. If a value is not returned, for example year 2000, this means that we don’t have contracts published in 2000.
 
-Possible values for *dataset*:
-* **years** - returns an array of valid years
-* **buyerCountries** - returns all buyer countries
-* **supplierCountries** - returns supplier countries
-* **sectors** - returns the main sector of the contract
-* **procedures** - returns the procedures (Service contract, Works)
-* **awardCriteria** - returns the awarding criteria (Lowest price, The most economic tender)
+Possible values for ```dataset```:
+* ```years``` - returns an array of valid years
+* ```buyerCountries``` - returns all buyer countries
+* ```supplierCountries``` - returns supplier countries
+* ```sectors``` - returns the main sector of the contract
+* ```procedures``` - returns the procedures (Service contract, Works)
+* ```awardCriteria``` - returns the awarding criteria (Lowest price, The most economic tender)
 
-**Response example**
-
+#### Response example
 ```
 GET http://www.contractawards.eu/open-contracting/api/v1/years
 
@@ -127,9 +191,135 @@ $.ajax({
 });
 ```
 
+## 5. Versioning
 
-## 6. Versioning
+Change is inevitable so we decided to implement a versioning API that will help us to iterate faster and prevent invalid requests. This will also allow us to easily adopt new version of the OCDS standard and continue to offer old API versions for a period of time. The version are identified as ```/api/v1/```, ```api/v2/``` and so on.
 
-Change is inevitable so we decided to implement a versioning API that will help us to iterate faster and prevent invalid requests. This will also allow us to easily adopt new version of the OCDS standard and continue to offer old API versions for a period of time. The version are identified as /**api/v1**/, **api/v2**/ and so on.
+## 6. Errors
 
-## 7. Errors
+In case of an error(client issue of server issue) we will return a response with a JSON error body that will provide:  a useful error message, a unique error code that can be looked up for a detailed description in the documentation and the URL that cause the error. For example:
+
+```
+{
+  "errors": [
+   {
+    "code" : 1024,
+    "message": "Sorry, the requested resource does not exist"
+    "url": "http://www.contractawards.eu/open-contracting/api/v1/release?id=156809-2006"
+   }
+  ]
+} 
+```
+or
+
+```
+{
+  "errors": [
+   {
+    "code" : 1020,
+    "message": " You should use at least 2 criteria from the following list of filters: sector, year, procedure, awardCriteria, buyerCountry, supplierCountry"
+    "url": "http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2012"
+   }
+  ]
+} 
+```
+
+## 7. Possible response
+
+In order to have a complete picture on the response that you can get by calling the **Records API** you can take a look at the following example.
+
+```
+{
+    "uri": "http://www.contractawards.eu/open-contracting/api/v1/record-package/{filters}",
+    "publisher": {
+        "name": "Development Gateway"
+    },
+    "license": "http://opensource.org/licenses/MIT",
+    "publishedDate": "2006-09-14T04:28:58-0400",
+    "packages": [
+        "http://www.contractawards.eu/open-contracting/api/v1/release-package/releaseID1",
+        "http://www.contractawards.eu/open-contracting/api/v1/release-package/releaseID2",
+        "http://www.contractawards.eu/open-contracting/api/v1/release-package/releaseID3"
+    ],
+    "records": [
+        {
+            "ocid": "1234-5678",
+            "releases": [
+                {
+                    "ocid": "1234-5678",
+                    "releaseID": "releaseID-1234-5678",
+                    "releaseDate": "2006-09-14T04:28:58-0400",
+                    "releaseTag": "awardNotice",
+                    "language": "en",
+                    "formationType": "tender",
+                    "buyer": {
+                        "id": {
+                            "name": "CONSEIL GÉNÉRAL DE L'YONNE",
+                            "uid": "6490828",
+                            "uri": "http://www.dgmarket.com/tenders/adminShowBuyer.do?buyerId=6490828"
+                        },
+                        "address": {
+                            "locality": "Paris",
+                            "region": "Paris",
+                            "country-name": "France"
+                        }
+                    },
+                    "tender": {
+                        "tenderID": "1219083",
+                        "notice": {
+                            "id": "1234-5678",
+                            "uri": "http://www.dgmarket.com/tenders/np-notice.do?noticeId=1219083",
+                            "publishedDate": "2006-03-21T00:00:00-0500"
+                        },
+                        "itemsToBeProcured": [{
+                            "description": "Construction work",
+                            "classificationScheme": "CPV",
+                            "classificationID": "45000000",
+                            "classificationDescription": "Construction work"
+                        }],
+                        "totalValue": {
+                            "amount": 100000,
+                            "currency": "EUR"
+                        },
+                        "numberOfBids": 3
+                    },
+                    "awards": [{
+                        "awardID": "1129358",
+                        "notice": {
+                            "id": "1234-5678",
+                            "uri": "http://www.dgmarket.com/tenders/np-notice.do?noticeId=1219083",
+                            "publishedDate": "2006-03-21T00:00:00-0500"
+                        },
+                        "awardValue": {
+                            "amount": 100000,
+                            "currency": "EUR"
+                        },
+                        "suppliers": [{
+                            "id": {
+                                "name": "Divers organismes",
+                                "uid": "123",
+                                "uri": "http://www.contractawards.eu/#!supplier=Divers+organismes"
+                            },
+                            "address": {
+                                "locality": "Bucharest",
+                                "region": "Ilfov",
+                                "country-name": "Romania"
+                            }
+                        }],
+                        "itemsAwarded": [{
+                            "description": "Construction work",
+                            "classificationScheme": "CPV",
+                            "classificationID": "45000000",
+                            "classificationDescription": "Construction work"
+                        }]
+                    }]
+                }
+            ]
+        }
+    ]
+}
+```
+
+
+
+
