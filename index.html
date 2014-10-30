@@ -1,37 +1,34 @@
 <!DOCTYPE html>
 <html>
-
   <head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="Open Contracting Data Standard API : ">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
 
-    <title>Open Contracting Data Standard API</title>
+    <title>Open Contracting Data Standard API by ionutdobre</title>
   </head>
 
   <body>
+    <header>
+      <div class="inner">
+        <h1>Open Contracting Data Standard API</h1>
+        <h2></h2>
+        <a href="https://github.com/ionutdobre/ocds_examples" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/ionutdobre/ocds_examples">View on GitHub</a>
-
-          <h1 id="project_title">Open Contracting Data Standard API</h1>
-          <h2 id="project_tagline"></h2>
-
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/ionutdobre/ocds_examples/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/ionutdobre/ocds_examples/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <p><strong>Open Contracting Data Standard</strong> aims to allow information to be shared as structured data and to provide a transparent way to analyze all the phases of a contract from planning to completion. By creating the <em>OCDS API</em> we are offering to developers the possibility to create easy to interpret visual reports and application that can identify trends in public contracts.</p>
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <p><strong>Open Contracting Data Standard</strong> aims to allow information to be shared as structured data and to provide a transparent way to analyze all the phases of a contract from planning to completion. By creating the <em>OCDS API</em> we are offering to developers the possibility to create easy to interpret visual reports and application that can identify trends in public contracts.</p>
 
 <p>This document provides a description of the APIs and examples of their use.</p>
 
@@ -99,7 +96,8 @@
 <code>buyer</code> - this represents the buyer name; Ex: <em>ADMINISTRADOR DE INFRAESTRUCTURAS FERROVIARIAS</em>
 </li>
 <li>
-<code>sector</code> - the name of the sector; Ex: <em>Transport services</em> </li>
+<code>sector</code> - the name of the sector; Ex: <em>Transport services</em>
+</li>
 <li>
 <code>year</code> - Ex: <em>2012</em>
 </li>
@@ -117,10 +115,11 @@
 </li>
 </ul>
 
-<p>Please note that the last 6 criteria: <em>sector</em>, <em>year</em>, <em>procedure</em>, <em>awardCriteria</em>, <em>buyerCountry</em> and <em>supplierCountry</em> need to be valid. You can check if one of these criteria is valid by invoking the <strong>Metadata API</strong>.</p>
+<p>Please note that the last 6 criteria: <code>sector</code>, <code>year</code>, <code>procedure</code>, <code>awardCriteria</code>, <code>buyerCountry</code> and <code>supplierCountry</code> need to be valid. You can check if one of these criteria is valid by invoking the <strong>Metadata API</strong>.</p>
 
-<p><strong>Request pagination</strong>
-In order to limit the response size and to allow a better manipulation of the data each request accepts the following parameters:</p>
+<p><strong>Request pagination</strong></p>
+
+<p>In order to limit the response size and to allow a better manipulation of the data each request accepts the following parameters:</p>
 
 <ul>
 <li>
@@ -132,6 +131,8 @@ In order to limit the response size and to allow a better manipulation of the da
 <pre><code>http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2008&amp;buyerCountry=Germany&amp;page=10&amp;pageSize=10
 </code></pre>
 
+<p>In the above example you will get the 10th page and 10 records.</p>
+
 <pre><code>http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2008&amp;supplierCountry=France&amp;page=1&amp;pageSize=50
 </code></pre>
 
@@ -142,9 +143,10 @@ In order to limit the response size and to allow a better manipulation of the da
 <a name="rules-for-invoking-the-filter-api" class="anchor" href="#rules-for-invoking-the-filter-api"><span class="octicon octicon-link"></span></a>Rules for invoking the Filter API</h3>
 
 <ol>
-<li> Supplier name and buyer name reset all other parameters, in other words if one of the supplier or buyer parameter is present all other parameters will be ignored. </li>
-<li> All other parameters (sector, year, procedure, awardCriteria, buyerCountry, supplierCountry) can be combined in any order with the condition that at least two criteria from the aforementioned list be used</li>
-<li> The HTTP Method for all request should be GET</li>
+<li> Supplier name and buyer name reset all other parameters, in other words if one of the <code>supplier</code> or <code>buyer</code> parameter is present all other parameters will be ignored.</li>
+<li> All other parameters (<code>sector</code>, <code>year</code>, <code>procedure</code>, <code>awardCriteria</code>, <code>buyerCountry</code>, <code>supplierCountry</code>) can be combined in any order with the condition that at least two criteria from the aforementioned list be used</li>
+<li> The <em>HTTP Method</em> for all request should be <strong>GET</strong>
+</li>
 </ol>
 
 <h3>
@@ -153,8 +155,8 @@ In order to limit the response size and to allow a better manipulation of the da
 <p><strong>Open Contracting Data Standard</strong> allows a release to be displayed in 2 ways in a record package:</p>
 
 <ul>
-<li>as a URI having a unique releaseID that contains the actual information about the release</li>
-<li>embed the actual release contend(the same content that can be obtain using the first method, but with this method the response  size will be much smaller</li>
+<li>as a URI having a unique <em>releaseID</em> that contains the actual information about the release</li>
+<li>embed the actual release contend(the same content that can be obtain using the first method), but with this method the response size will be much larger</li>
 </ul>
 
 <p>Having this in consideration and the fact that an API consumer doesn’t always need the full representation of a release the user can use the <code>embed=true</code> parameter in order to minimize network traffic and speed up the usage of the <strong>Records API</strong>.</p>
@@ -191,7 +193,7 @@ In order to limit the response size and to allow a better manipulation of the da
 <h3>
 <a name="getting-a-single-record" class="anchor" href="#getting-a-single-record"><span class="octicon octicon-link"></span></a>Getting a single record</h3>
 
-<p>Each record has a unique Open Contracting ID called <code>ocid</code> (<a href="http://ocds.open-contracting.org/standard/r/0__3__3/#conceptual-model">http://ocds.open-contracting.org/standard/r/0__3__3/#conceptual-model</a>) and sometimes it is useful not to see the big picture but only the informations about a particular record so the user can do that by using the following API:</p>
+<p>Each record has a unique <strong>Open Contracting ID</strong> called <code>ocid</code> (<a href="http://ocds.open-contracting.org/standard/r/0__3__3/#conceptual-model">http://ocds.open-contracting.org/standard/r/0__3__3/#conceptual-model</a>) and sometimes it is useful not to see the big picture but only the informations about a particular record so the user can do that by using the following API:</p>
 
 <pre><code>http://www.contractawards.eu/open-contracting/api/v1/record?recordId=&lt;ocid&gt;
 </code></pre>
@@ -199,7 +201,25 @@ In order to limit the response size and to allow a better manipulation of the da
 <h3>
 <a name="pretty-print-format" class="anchor" href="#pretty-print-format"><span class="octicon octicon-link"></span></a>Pretty print format</h3>
 
-<p>By default the API provides pretty printing of the JSON output because it’s more approachable but in a production application the user can reduce the cost of the data transfer by using the parameter <code>?pretty=false</code> in order to remove all the white spaces from the response.</p>
+<p>By default the API provides pretty printing of the JSON output because it’s more approachable but in a production application the user can reduce the cost of the data transfer by using the parameter <code>pretty=false</code> in order to remove all the white spaces from the response.</p>
+
+<h3>
+<a name="records-api-response" class="anchor" href="#records-api-response"><span class="octicon octicon-link"></span></a>Records API Response</h3>
+
+<p>The response fields for the package records are explained in more detailed below</p>
+
+<ul>
+<li>
+<code>uri</code> - the URI of this records package</li>
+<li>
+<code>publisher</code> - information to uniquely identify the publisher of this package</li>
+<li>
+<code>publishedDate</code> - the date that this package was published.</li>
+<li>
+<code>packages</code> - a list of URIs of all the release packages that were used to create this record package</li>
+<li>
+<code>records</code> - the records for this data package</li>
+</ul>
 
 <h2>
 <a name="3-releases-api" class="anchor" href="#3-releases-api"><span class="octicon octicon-link"></span></a>3. Releases API</h2>
@@ -221,11 +241,152 @@ In order to limit the response size and to allow a better manipulation of the da
 
 <p><strong>Pretty format</strong> - the <strong>Release API</strong> supports the same <code>pretty=false</code> parameter as <strong>Records API</strong> in order to get a white-space compressed response.</p>
 
+<h3>
+<a name="release-api-response" class="anchor" href="#release-api-response"><span class="octicon octicon-link"></span></a>Release API Response</h3>
+
+<p>The response fields for a release are explained in more detailed below</p>
+
+<ul>
+<li>
+<code>ocid</code> - A unique identifier that identifies the unique Open Contracting Process</li>
+<li>
+<code>releaseID</code> - A unique identifier that identifies this release</li>
+<li>
+<code>releaseDate</code> - The date this information is released, it may well be the same as the parent publishedDate</li>
+<li>
+<code>releaseTag</code> - A tag that helps to identify the type of data in the dataset (it should be <em>awardNotice</em>)</li>
+<li>
+<code>language</code> - Specifies the default language of the data</li>
+<li>
+<code>formationType</code> - String specifying the type of formation process used for this contract(it should be <em>tender</em>)</li>
+<li>
+<code>buyer</code> - The buyer is the entity whose budget will be used to purchase the goods.
+
+<ul>
+<li>
+<strong>id</strong>
+
+<ul>
+<li><em>name</em></li>
+<li><em>uid</em></li>
+<li><em>uri</em></li>
+</ul>
+</li>
+<li>
+<strong>address</strong> - An Address following the convention of <a href="http://microformats.org/wiki/hcard">http://microformats.org/wiki/hcard</a>
+
+<ul>
+<li><em>locality</em></li>
+<li><em>region</em></li>
+<li><em>country-name</em></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<code>tender</code> - The activities undertaken in order to enter into a contract.
+
+<ul>
+<li>
+<strong>tenderID</strong> - TenderID should always be the same as the OCID.</li>
+<li>
+<strong>notice</strong> - The notice is a published document that notifies the public at various stages of the contracting process
+
+<ul>
+<li><em>id</em></li>
+<li><em>uri</em></li>
+<li><em>publishedDate</em></li>
+</ul>
+</li>
+<li>
+<strong>itemsToBeProcured</strong> - The goods and services to be purchased
+
+<ul>
+<li><em>description</em></li>
+<li><em>classificationScheme</em></li>
+<li><em>classificationID</em></li>
+<li><em>classificationDescription</em></li>
+</ul>
+</li>
+<li>
+<strong>totalValue</strong> - The total estimated value of the procurement
+
+<ul>
+<li><em>amount</em></li>
+<li><em>currency</em></li>
+</ul>
+</li>
+<li>
+<strong>numberOfBids</strong> - The number of unique bidders who participated in the tender</li>
+</ul>
+</li>
+<li>
+<code>awards</code> - Information from the award phase of the contracting process
+
+<ul>
+<li>
+<strong>awardID</strong> - The identifier for this award</li>
+<li>
+<strong>notice</strong>
+
+<ul>
+<li><em>id</em></li>
+<li><em>uri</em></li>
+<li><em>publishedDate</em></li>
+</ul>
+</li>
+<li>
+<strong>awardValue</strong> - The total value of this award
+
+<ul>
+<li><em>amount</em></li>
+<li><em>currency</em></li>
+</ul>
+</li>
+<li>
+<strong>suppliers</strong> - The suppliers awarded this award
+
+<ul>
+<li>
+<em>id</em>
+
+<ul>
+<li><em>name</em></li>
+<li><em>uid</em></li>
+<li><em>uri</em></li>
+</ul>
+</li>
+<li>
+<em>address</em>
+
+<ul>
+<li><em>locality</em></li>
+<li><em>region</em></li>
+<li><em>country-name</em></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<strong>itemsAwarded</strong> - The goods and services awarded in this award, broken into line items wherever possible
+
+<ul>
+<li><em>description</em></li>
+<li><em>classificationScheme</em></li>
+<li><em>classificationID</em></li>
+<li><em>classificationDescription</em></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
 <h2>
 <a name="4-metadata-api" class="anchor" href="#4-metadata-api"><span class="octicon octicon-link"></span></a>4. Metadata API</h2>
 
-<p><strong>Getting filters metadata</strong>
-This API is used to get information about the <em>filters</em> that can be used with the <strong>Records API</strong></p>
+<p><strong>Getting filters metadata</strong></p>
+
+<p>This API is used to get information about the <code>filters</code> that can be used with the <strong>Records API</strong></p>
 
 <h3>
 <a name="basic-call-and-parameters-2" class="anchor" href="#basic-call-and-parameters-2"><span class="octicon octicon-link"></span></a>Basic call and parameters</h3>
@@ -291,7 +452,7 @@ This API is used to get information about the <em>filters</em> that can be used 
     "url": "http://www.contractawards.eu/open-contracting/api/v1/release?id=156809-2006"
    }
   ]
-} 
+}
 </code></pre>
 
 <p>or</p>
@@ -402,18 +563,25 @@ This API is used to get information about the <em>filters</em> that can be used 
     ]
 }
 </code></pre>
-      </section>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/ionutdobre/ocds_examples/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/ionutdobre/ocds_examples/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/ionutdobre/ocds_examples"></a> is maintained by <a href="https://github.com/ionutdobre">ionutdobre</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
     </div>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Open Contracting Data Standard API maintained by <a href="https://github.com/ionutdobre">ionutdobre</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
-
-    
-
+  
   </body>
 </html>
