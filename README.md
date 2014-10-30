@@ -16,7 +16,7 @@ This document provides a description of the APIs and examples of their use.
 ## 1. API Conventions
 
 ### Authentication
-Using the OCDS API doesn’t require any kind of authentication, users can send as many request as they want, the only limitation will be the number of records returned; in this way we encourage developers to use pagination in order to iterate throw all of the data.
+Using the OCDS API doesn’t require any kind of authentication, users can send as many requests as they want, the only limitation will be the number of records returned; in this way we encourage developers to use pagination in order to iterate through all of the data.
 
 ### JSON Callbacks
 The **OCDS API** is developer-friendly so it’s explorable via a browser address bar for testing purposes, but also in a real application you can use AJAX or JSON-P callbacks in order to query the system and *consume* the response:
