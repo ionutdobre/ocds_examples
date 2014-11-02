@@ -1,7 +1,7 @@
 OCDS API
 ========
 
-**Open Contracting Data Standard** aims to allow information to be shared as structured data and to provide a transparent way to analyze all the phases of a contract from planning to completion. By creating the *OCDS API* we are offering to developers the possibility to create easy to interpret visual reports and application that can identify trends in public contracts.
+**Open Contracting Data Standard** aims to allow information to be shared as structured data and to provide a transparent way to analyze all the phases of a contract from planning to completion. By creating the *OCDS API* we are offering developers the possibility to create with open contracting data reports and applications that can identify trends in public contracts.
 
 This document provides a description of the APIs and examples of their use.
 
@@ -16,10 +16,10 @@ This document provides a description of the APIs and examples of their use.
 ## 1. API Conventions
 
 ### Authentication
-Using the OCDS API doesn’t require any kind of authentication, users can send as many requests as they want, the only limitation will be the number of records returned; in this way we encourage developers to use pagination in order to iterate through all of the data.
+OCDS API doesn’t require any kind of authentication. Users can send as many requests as they want, the only limitation will be the number of records returned; in this way we encourage developers to use pagination in order to iterate through all of the requested data.
 
 ### JSON Callbacks
-The **OCDS API** is developer-friendly so it’s explorable via a browser address bar for testing purposes, but also in a real application you can use AJAX or JSON-P callbacks in order to query the system and *consume* the response:
+**OCDS API** is explorable via a browser address bar for testing purposes. In a real application you can use AJAX or JSON-P callbacks in order to query the system and *consume* the response:
 
 ```
 $.ajax({
@@ -31,9 +31,9 @@ $.ajax({
 });
 ```
 
-All the request should have the type **GET**.
+All requests should have the type **GET**.
 
-### Definitions from OCDS
+### OCDS Definitions
 Information about an Open Contracting Process may accumulate over time. As a result, the Open Contracting Data Standard provides for two kinds of data:
 1. **Contracting releases** - each release provides information pertaining to a particular stage in the contracting process - such as tender notices, award notices, or details of a finalized contract.
 2. **Contracting record** - A contracting record provides a snapshot of all the key elements of a unique contracting process, including its planning, formation, performance and completion.
