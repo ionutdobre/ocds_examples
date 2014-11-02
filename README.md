@@ -15,8 +15,9 @@ This document provides a description of the APIs and examples of their use.
 
 ## 1. API Conventions
 
-### Authentication
-OCDS API doesn’t require any kind of authentication. Users can send as many requests as they want, the only limitation will be the number of records returned; in this way we encourage developers to use pagination in order to iterate through all of the requested data.
+### Authentication and Usage Limits
+OCDS API doesn’t require any kind of authentication. 
+Users can send as many requests as they want, the only limitation will be the number of records returned; in this way we encourage developers to use pagination in order to iterate through all of the requested data.
 
 ### JSON Callbacks
 **OCDS API** is explorable via a browser address bar for testing purposes. In a real application you can use AJAX or JSON-P callbacks in order to query the system and *consume* the response:
@@ -35,14 +36,14 @@ All requests should have the type **GET**.
 
 ### OCDS Definitions
 Information about an Open Contracting Process may accumulate over time. As a result, the Open Contracting Data Standard provides for two kinds of data:
-1. **Contracting releases** - each release provides information pertaining to a particular stage in the contracting process - such as tender notices, award notices, or details of a finalized contract.
-2. **Contracting record** - A contracting record provides a snapshot of all the key elements of a unique contracting process, including its planning, formation, performance and completion.
+1. **Contracting release** - Information pertaining to a particular stage in the contracting process - such as tender notices, award notices, or details of a finalized contract.
+2. **Contracting record** - A snapshot of all the key elements of a unique contracting process, including its planning, formation, performance and completion.
 
 Both **contracting releases** and **contracting records** are provided within data packages, containing meta-data about the publisher, publication data and licensing information.
 
 ## 2. Records API
 
-This API can be used to generate record packages or to retrieve individual *record* information. It is build to be flexible and with the help of the *filters* users can slice the data and drill down the results.
+This API can be used to generate record packages or to retrieve individual *record* information. With the help of *filters* users can slice the data and drill down the results.
 
 ### Basic call and parameters
 
@@ -50,28 +51,29 @@ This API can be used to generate record packages or to retrieve individual *reco
 http://www.contractawards.eu/open-contracting/api/v1/record-package?<filters>
 ```
 The following parameters (```filters```) are supported:
-* ```supplier``` - this represents the supplier name; Ex: *Acciona infraestructuras*
-* ```buyer``` - this represents the buyer name; Ex: *ADMINISTRADOR DE INFRAESTRUCTURAS FERROVIARIAS*
-* ```sector``` - the name of the sector; Ex: *Transport services*
-* ```year``` - Ex: *2012*
-* ```procedure``` - Ex: *Service contract*
-* ```awardCriteria``` - Ex: *Lowest price*
-* ```buyerCountry``` - Ex: *Germany*
-* ```supplierCountry``` - Ex: *Italy*
+* ```supplier``` - Supplier name, e.g., *Acciona infraestructuras*
+* ```buyer``` - Buyer name, e.g., *ADMINISTRADOR DE INFRAESTRUCTURAS FERROVIARIAS*
+* ```sector``` - Sector, e.g., *Transport services*(!)
+* ```year``` - Year, e.g., *2012*
+* ```procedure``` - Tendering procedure, e.g., *Service contract* (!)
+* ```awardCriteria``` - Award criteria, e.g, *Lowest price*
+* ```buyerCountry``` - e.g., *Germany* (!)
+* ```supplierCountry``` - e.g., *Italy* (!)
 
-Please note that the last 6 criteria: ```sector```, ```year```, ```procedure```, ```awardCriteria```, ```buyerCountry``` and ```supplierCountry``` need to be valid. You can check if one of these criteria is valid by invoking the **Metadata API**.
+Please note that the last 6 criteria (```sector```, ```year```, ```procedure```, ```awardCriteria```, ```buyerCountry``` and ```supplierCountry```) need to be valid. You can check the validity by invoking the **Metadata API**.
 
 **Request pagination**
 
-In order to limit the response size and to allow a better manipulation of the data each request accepts the following parameters:
+Each request accepts the following parameters:
 * ```page``` – page number
 * ```pageSize``` – number of records per page; the default value is 100 and it can not be greater that 1000
 
+For example, 
 ```
-http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2008&buyerCountry=Germany&page=10&pageSize=10
+http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2008&buyerCountry=Germany&page=10&pageSize=20
 ```
 
-In the above example you will get the 10th page and 10 records.
+In the above example you will get the 10th 20-record page.
 
 ```
 http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2008&supplierCountry=France&page=1&pageSize=50
