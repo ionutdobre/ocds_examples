@@ -66,7 +66,7 @@ Please note that the last 6 criteria (```sector```, ```year```, ```procedure```,
 
 Each request accepts the following parameters:
 * ```page``` – page number
-* ```pageSize``` – number of records per page; the default value is 100 and it can not be greater that 1000
+* ```pageSize``` – number of records per page; the default value is 100 and it cannot be greater than 1000
 
 For example, 
 ```
