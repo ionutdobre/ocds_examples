@@ -73,7 +73,7 @@ For example,
 http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2008&buyerCountry=Germany&page=10&pageSize=20
 ```
 
-In the above example you will get the 10th 20-record page.
+In the above example you will return the 10th 20-record page.
 
 ```
 http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2008&supplierCountry=France&page=1&pageSize=50
@@ -84,18 +84,15 @@ http://www.contractawards.eu/open-contracting/api/v1/record-package?sector=Const
 ```
 
 ### Rules for invoking the Filter API
-1.	Supplier name and buyer name reset all other parameters, in other words if one of the ```supplier``` or ```buyer``` parameter is present all other parameters will be ignored.
-2.	All other parameters (```sector```, ```year```, ```procedure```, ```awardCriteria```, ```buyerCountry```, ```supplierCountry```) can be combined in any order with the condition that at least two criteria from the aforementioned list be used
-3.	The *HTTP Method* for all request should be **GET**
+1.	Supplier name and buyer name reset all other parameters, in other words if one of the ```supplier``` or ```buyer``` parameter is present all other parameters will be ignored. (!)
+2.	All other parameters (```sector```, ```year```, ```procedure```, ```awardCriteria```, ```buyerCountry```, ```supplierCountry```) can be combined in any order with the condition that at least two criteria from the aforementioned list be used. (!)
 
 ### Limiting release content that is returned by the API
-**Open Contracting Data Standard** allows a release to be displayed in 2 ways in a record package:
-* as a URI having a unique *releaseID* that contains the actual information about the release
-* embed the actual release contend(the same content that can be obtain using the first method), but with this method the response size will be much larger
+There two ways to include a release into a record package:
+* as a URI pointing to the release
+* as the actual release content by inserting ```embed=true``` parameter.
 
-Having this in consideration and the fact that an API consumer doesn’t always need the full representation of a release the user can use the ```embed=true``` parameter in order to minimize network traffic and speed up the usage of the **Records API**.
-
-For example, the following request would retrieve just the basic information about a record package but it will also have the releases URI that can be further used to retrieve the releases content:
+For example, the following request would retrieve just basic information about a record package, with release URIs that can be called to obtain the actual release information:
 
 ```
 GET http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2012&embed=true
@@ -125,44 +122,42 @@ GET http://www.contractawards.eu/open-contracting/api/v1/record-package?year=201
 }
 ```
 
-### Getting a single record
-
-Each record has a unique **Open Contracting ID** called ```ocid``` (http://ocds.open-contracting.org/standard/r/0__3__3/#conceptual-model) and sometimes it is useful not to see the big picture but only the informations about a particular record so the user can do that by using the following API:
+### Obtaining a single record
+Each record has a unique **Open Contracting ID** called ```ocid``` (http://ocds.open-contracting.org/standard/r/0__3__3/#conceptual-model). A particular record can be retrieves via the following API:
 
 ```
 http://www.contractawards.eu/open-contracting/api/v1/record?recordId=<ocid>
 ```
 
 ### Pretty print format
-By default the API provides pretty printing of the JSON output because it’s more approachable but in a production application the user can reduce the cost of the data transfer by using the parameter ```pretty=false``` in order to remove all the white spaces from the response.
+By default, the API provides pretty printing of the JSON output. In a production application a user can reduce the cost of  data transfer by using the parameter ```pretty=false``` in order to remove all the white spaces from the response.
 
 ### Records API Response
+Records contain the following information:
 
-The response fields for the package records are explained in more detailed below
-
-* ```uri``` - the URI of this records package
-* ```publisher``` - information to uniquely identify the publisher of this package
-* ```publishedDate``` - the date that this package was published.
-* ```packages``` - a list of URIs of all the release packages that were used to create this record package
-* ```records``` - the records for this data package
+* ```uri``` - URI of the records package
+* ```publisher``` - information that uniquely identifies the publisher of this package
+* ```publishedDate``` -package publication date
+* ```packages``` - a list of URIs of release packages included in the record package
+* ```records``` - records included in this records package
 
 ## 3. Releases API
 
-This API can be used to obtain informations about a package release or a particular release. It can be useful to obtain more  information about a particular stage in the contracting process or if the user is using the ```embed=true``` parameter in the **Records API** and then he wants to get the content of the releases.
+This API provides information about a package release or a single release. It can be used to obtain information related to a particular stage in the contracting process.
 
 ### Basic call and parameters
 
+Obtain a release package:
 ```
 http://www.contractawards.eu/open-contracting/api/v1/release-package?releaseId=<id>
 ```
 
-It can be used to get the release package with the given ```id```.
-
+Obtain an individual releaze:
 ```
 http://www.contractawards.eu/open-contracting/api/v1/release?releaseId=<id>
 ```
 
-It can be used to get only one release content with the given ```id```.
+It can be used to 
 
 **Pretty format** - the **Release API** supports the same ```pretty=false``` parameter as **Records API** in order to get a white-space compressed response.
 
