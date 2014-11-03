@@ -73,7 +73,7 @@ For example,
 http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2008&buyerCountry=Germany&page=10&pageSize=20
 ```
 
-In the above example you will return the 10th 20-record page.
+The example above returns the 10th 20-record page.
 
 ```
 http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2008&supplierCountry=France&page=1&pageSize=50
@@ -87,7 +87,7 @@ http://www.contractawards.eu/open-contracting/api/v1/record-package?sector=Const
 1.	Supplier name and buyer name reset all other parameters, in other words if one of the ```supplier``` or ```buyer``` parameter is present all other parameters will be ignored. (!)
 2.	All other parameters (```sector```, ```year```, ```procedure```, ```awardCriteria```, ```buyerCountry```, ```supplierCountry```) can be combined in any order with the condition that at least two criteria from the aforementioned list be used. (!)
 
-### Limiting release content that is returned by the API
+### Release content returned by the API
 There two ways to include a release into a record package:
 * as a URI pointing to the release
 * as the actual release content by inserting ```embed=true``` parameter.
@@ -157,21 +157,18 @@ Obtain an individual releaze:
 http://www.contractawards.eu/open-contracting/api/v1/release?releaseId=<id>
 ```
 
-It can be used to 
-
-**Pretty format** - the **Release API** supports the same ```pretty=false``` parameter as **Records API** in order to get a white-space compressed response.
+**Pretty format** - the **Release API** supports the same ```pretty=false``` parameter as **Records API**; it triggers white-space compression of the response.
 
 ### Release API Response
+Releases contain the following information:
 
-The response fields for a release are explained in more detailed below
-
-* ```ocid``` - A unique identifier that identifies the unique Open Contracting Process
-* ```releaseID``` - A unique identifier that identifies this release
-* ```releaseDate``` - The date this information is released, it may well be the same as the parent publishedDate
-* ```releaseTag``` - A tag that helps to identify the type of data in the dataset (it should be *awardNotice*)
-* ```language``` - Specifies the default language of the data
-* ```formationType``` - String specifying the type of formation process used for this contract(it should be *tender*)
-* ```buyer``` - The buyer is the entity whose budget will be used to purchase the goods.
+* ```ocid``` - A unique identifier of an Open Contracting Process (!)
+* ```releaseID``` - A unique release identifier
+* ```releaseDate``` - The date this information was released
+* ```releaseTag``` - A tag that helps to identify the type of data in the dataset (e.e, *awardNotice*)
+* ```language``` - The default language of the data returned
+* ```formationType``` - String specifying the type of formation process used for this contract(should be *tender*)
+* ```buyer``` - An entity that procures goods, works or services.
 	* **id**
 		* *name*
 		* *uid*
@@ -180,9 +177,9 @@ The response fields for a release are explained in more detailed below
 		* *locality*
 		* *region*
 		* *country-name*
-* ```tender``` - The activities undertaken in order to enter into a contract.
+* ```tender``` - Activities undertaken in order to enter into a contract.
 	* **tenderID** - TenderID should always be the same as the OCID.
-	* **notice** - The notice is a published document that notifies the public at various stages of the contracting process
+	* **notice** - A notice is a public document that notifies the public about various stages of the contracting process
 		* *id*
 		* *uri*
 		* *publishedDate*
@@ -195,13 +192,14 @@ The response fields for a release are explained in more detailed below
 		* *amount*
 		* *currency*
 	* **numberOfBids** - The number of unique bidders who participated in the tender
-* ```awards``` - Information from the award phase of the contracting process
-	* **awardID** - The identifier for this award
+
+* ```awards``` - Information related to the award phase of the contracting process
+	* **awardID**
 	* **notice**
 		* *id*
 		* *uri*
 		* *publishedDate*
-	* **awardValue** - The total value of this award
+	* **awardValue**
 		* *amount*
 		* *currency*
 	* **suppliers** - The suppliers awarded this award
@@ -223,22 +221,22 @@ The response fields for a release are explained in more detailed below
 
 **Getting filters metadata**
 
-This API is used to get information about the ```filters``` that can be used with the **Records API**
+This API returns information about ```filters``` that can be used to query **Records API**
 
 ### Basic call and parameters
 ```
 GET /open-contracting/api/v1/<dataset>
 ```
 
-Calls will return information about the ```dataset``` and all valid values that can be used. If a value is not returned, for example year 2000, this means that we don’t have contracts published in 2000.
+Calls will return information about the ```dataset``` and all valid values that can be used to query it. If a value is not returned, for example, year 2000, then it means that the dataset doesn't have contracts published in 2000.
 
 Possible values for ```dataset```:
 * ```years``` - returns an array of valid years
 * ```buyerCountries``` - returns all buyer countries
-* ```supplierCountries``` - returns supplier countries
-* ```sectors``` - returns the main sector of the contract
-* ```procedures``` - returns the procedures (Service contract, Works)
-* ```awardCriteria``` - returns the awarding criteria (Lowest price, The most economic tender)
+* ```supplierCountries``` - returns all supplier countries
+* ```sectors``` - returns sectors that the dataset belongs to
+* ```procedures``` - returns the procedures (e.g., Service contract, Works) (!)
+* ```awardCriteria``` - returns award criteria (Lowest price, The most economic tender)
 
 #### Response example
 ```
@@ -249,7 +247,7 @@ GET http://www.contractawards.eu/open-contracting/api/v1/years
 }
 ```
 
-The above response will be available in a web browser, but if the user uses ajax, then a possible way to get all the years that can be used to filter the data will be:
+The above response will be available in a web browser. When using Ajax, one can obtain a list of years in a dataset as follows:
 
 ```
 $.ajax({
@@ -263,7 +261,7 @@ $.ajax({
 
 ## 5. Versioning
 
-Change is inevitable so we decided to implement a versioning API that will help us to iterate faster and prevent invalid requests. This will also allow us to easily adopt new version of the OCDS standard and continue to offer old API versions for a period of time. The version are identified as ```/api/v1/```, ```api/v2/``` and so on.
+Change is inevitable so we decided to implement a versioning API that will help us to iterate faster and prevent invalid requests. This will also allow us to easily adopt new version of OCDS standard and continue to support old API versions for a period of time. The version are identified as ```/api/v1/```, ```api/v2/``` and so on.
 
 ## 6. Errors
 
