@@ -193,7 +193,7 @@ Releases contain the following information:
 		* *currency*
 	* **numberOfBids** - The number of unique bidders who participated in the tender
 
-* ```awards``` - Information related to the award phase of the contracting process
+* ```awards``` - Information related to the award phase of the contracting process (!)
 	* **awardID**
 	* **notice**
 		* *id*
@@ -202,7 +202,7 @@ Releases contain the following information:
 	* **awardValue**
 		* *amount*
 		* *currency*
-	* **suppliers** - The suppliers awarded this award
+	* **suppliers** - The awarded suppliers
 		* *id*
 			* *name*
 			* *uid*
@@ -211,7 +211,7 @@ Releases contain the following information:
 			* *locality*
 			* *region*
 			* *country-name*
-	* **itemsAwarded** - The goods and services awarded in this award, broken into line items wherever possible
+	* **itemsAwarded** - The goods and services included in the awarded contract, broken into line items wherever possible
 		* *description*
 		* *classificationScheme*
 		* *classificationID*
@@ -228,15 +228,15 @@ This API returns information about ```filters``` that can be used to query **Rec
 GET /open-contracting/api/v1/<dataset>
 ```
 
-Calls will return information about the ```dataset``` and all valid values that can be used to query it. If a value is not returned, for example, year 2000, then it means that the dataset doesn't have contracts published in 2000.
+This call returns information about a ```dataset``` and all valid values that can be used to query it. If a value is not returned, for example, year 2001, then it means that there are no contracts published in 2001.
 
-Possible values for ```dataset```:
+Possible ```dataset``` values include:
 * ```years``` - returns an array of valid years
 * ```buyerCountries``` - returns all buyer countries
 * ```supplierCountries``` - returns all supplier countries
-* ```sectors``` - returns sectors that the dataset belongs to
-* ```procedures``` - returns the procedures (e.g., Service contract, Works) (!)
-* ```awardCriteria``` - returns award criteria (Lowest price, The most economic tender)
+* ```sectors``` - returns all sectors
+* ```procedures``` - returns all  procedures (e.g., Service contract, Works) (!)
+* ```awardCriteria``` - returns all award criteria (Lowest price, The most economic tender, etc.)
 
 #### Response example
 ```
@@ -247,7 +247,7 @@ GET http://www.contractawards.eu/open-contracting/api/v1/years
 }
 ```
 
-The above response will be available in a web browser. When using Ajax, one can obtain a list of years in a dataset as follows:
+The above response can be viewed in a web browser. When using Ajax, one can obtain a list of years in a dataset as follows:
 
 ```
 $.ajax({
@@ -261,11 +261,11 @@ $.ajax({
 
 ## 5. Versioning
 
-Change is inevitable so we decided to implement a versioning API that will help us to iterate faster and prevent invalid requests. This will also allow us to easily adopt new version of OCDS standard and continue to support old API versions for a period of time. The version are identified as ```/api/v1/```, ```api/v2/``` and so on.
+Change is inevitable, and the versioning API helps iterate faster and prevent invalid requests. This also allows to adopt new version of OCDS standard while continuing to support old API versions for a some time. Versions are identified as ```/api/v1/```, ```api/v2/``` and so on.
 
 ## 6. Errors
 
-In case of an error(client issue of server issue) we will return a response with a JSON error body that will provide:  a useful error message, a unique error code that can be looked up for a detailed description in the documentation and the URL that cause the error. For example:
+In case of an error (on client or server side) a response will contain JSON error body that provides:  a useful error message, an error code, and the URL that caused the error. For example:
 
 ```
 {
@@ -285,16 +285,16 @@ or
   "errors": [
    {
     "code" : 1020,
-    "message": " You should use at least 2 criteria from the following list of filters: sector, year, procedure, awardCriteria, buyerCountry, supplierCountry"
+    "message": " You should use at least 2 criteria from the following list of filters: sector, year, procedure, awardCriteria, buyerCountry, supplierCountry" (!)
     "url": "http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2012"
    }
   ]
 } 
 ```
 
-## 7. Possible response
+## 7. Examples
 
-In order to have a complete picture on the response that you can get by calling the **Records API** you can take a look at the following example.
+The following is an example of **Records API** response:
 
 ```
 {
