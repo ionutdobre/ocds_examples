@@ -61,7 +61,7 @@ The following parameters (```filters```) are supported:
 * ```buyerCountry``` - 2 digits country code, e.g., *de* for Germany 
 * ```supplierCountry``` - 2 digits country code, e.g., *it* for Italy
 
-Please note that the last 6 criteria (```sector```, ```year```, ```contractType ```, ```awardCriteria```, ```buyerCountry``` and ```supplierCountry```) need to be valid. You can check the validity by invoking the **Metadata API**.
+Please note that the last 6 criteria (```item```, ```year```, ```contractType ```, ```awardCriteria```, ```buyerCountry``` and ```supplierCountry```) need to be valid. You can check the validity by invoking the **Metadata API**.
 
 **Request pagination**
 
@@ -81,13 +81,13 @@ http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2008&su
 ```
 
 ```
-http://www.contractawards.eu/open-contracting/api/v1/record-package?sector=Construction work&procedure=Service contract&year=2012&page=1&pageSize=1000
+http://www.contractawards.eu/open-contracting/api/v1/record-package?item={"classificationScheme": "CPV", "classificationID": "45000000", "classificationDescription": "Construction work"}&procedure=Service contract&year=2012&page=1&pageSize=1000
 ```
 
 ### Limitation of the Filter API implementation
 
 1.	Supplier name and buyer name reset all other parameters, in other words if one of the ```supplier``` or ```buyer``` parameter is present all other parameters will be ignored.
-2.	All other parameters (```sector```, ```year```, ```procedure```, ```awardCriteria```, ```buyerCountry```, ```supplierCountry```) can be combined in any order with the condition that at least two criteria from the aforementioned list be used.
+2.	All other parameters (```item```, ```year```, ```procedure```, ```awardCriteria```, ```buyerCountry```, ```supplierCountry```) can be combined in any order with the condition that at least two criteria from the aforementioned list be used.
 
 ### Release content returned by the API
 There two ways to include a release into a record package:
@@ -253,7 +253,7 @@ Possible ```dataset``` values include:
 * ```years``` - returns an array of valid years
 * ```buyerCountries``` - returns all buyer countries
 * ```supplierCountries``` - returns all supplier countries
-* ```sectors``` - returns all sectors
+* ```items``` - returns all sectors
 * ```contractType``` - returns all  contract types (e.g., Service contract, Works)
 * ```awardCriteria``` - returns all award criteria (Lowest price, The most economic tender, etc.)
 
@@ -304,7 +304,7 @@ or
 	"errors": [
 		{
 			"code" : 1020,
-			"message": " You should use at least 2 criteria from the following list of filters: sector, year, procedure, awardCriteria, buyerCountry, supplierCountry"
+			"message": " You should use at least 2 criteria from the following list of filters: item, year, procedure, awardCriteria, buyerCountry, supplierCountry"
 			"url": "http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2012"
 		}
 	]
