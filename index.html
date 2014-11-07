@@ -31,7 +31,7 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <p><strong>Open Contracting Data Standard</strong> aims to allow information to be shared as structured data and to provide a transparent way to analyze all the phases of a contract from planning to completion. By creating the <em>OCDS API</em> we are offering to developers the possibility to create easy to interpret visual reports and application that can identify trends in public contracts.</p>
+        <p><strong>Open Contracting Data Standard</strong> aims to allow information to be shared as structured data and to provide a transparent way to analyze all the phases of a contract from planning to completion. By creating the <em>OCDS API</em> we are offering developers the possibility to create with open contracting data reports and applications that can identify trends in public contracts.</p>
 
 <p>This document provides a description of the APIs and examples of their use.</p>
 
@@ -42,21 +42,21 @@
 <li>Metadata API</li>
 <li>Versioning</li>
 <li>Errors</li>
-<li>Possible response</li>
+<li>Examples</li>
 </ol>
 
 <h2>
-<a name="1-api-conventions" class="anchor" href="#1-api-conventions"><span class="octicon octicon-link"></span></a>1. API Conventions</h2>
+<a id="1-api-conventions" class="anchor" href="#1-api-conventions" aria-hidden="true"><span class="octicon octicon-link"></span></a>1. API Conventions</h2>
 
 <h3>
-<a name="authentication" class="anchor" href="#authentication"><span class="octicon octicon-link"></span></a>Authentication</h3>
+<a id="authentication-and-usage-limits" class="anchor" href="#authentication-and-usage-limits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Authentication and Usage Limits</h3>
 
-<p>Using the OCDS API doesn’t require any kind of authentication, users can send as many request as they want, the only limitation will be the number of records returned; in this way we encourage developers to use pagination in order to iterate throw all of the data.</p>
+<p>OCDS API doesn’t require any kind of authentication.Users can send as many requests as they want, the only limitation will be the number of records returned; in this way we encourage developers to use pagination in order to iterate through all of the requested data.</p>
 
 <h3>
-<a name="json-callbacks" class="anchor" href="#json-callbacks"><span class="octicon octicon-link"></span></a>JSON Callbacks</h3>
+<a id="json-callbacks" class="anchor" href="#json-callbacks" aria-hidden="true"><span class="octicon octicon-link"></span></a>JSON Callbacks</h3>
 
-<p>The <strong>OCDS API</strong> is developer-friendly so it’s explorable via a browser address bar for testing purposes, but also in a real application you can use AJAX or JSON-P callbacks in order to query the system and <em>consume</em> the response:</p>
+<p><strong>OCDS API</strong> is explorable via a browser address bar for testing purposes. In a real application you can use AJAX or JSON-P callbacks in order to query the system and <em>consume</em> the response:</p>
 
 <pre><code>$.ajax({
     type: 'GET',
@@ -67,24 +67,26 @@
 });
 </code></pre>
 
-<p>All the request should have the type <strong>GET</strong>.</p>
+<p><em>You should be aware that <a href="http://www.contractawards.eu">http://www.contractawards.eu</a> web application supports the OCDS standard but it is not part of the standard</em>.</p>
+
+<p>All requests should have the type <strong>GET</strong>.</p>
 
 <h3>
-<a name="definitions-from-ocds" class="anchor" href="#definitions-from-ocds"><span class="octicon octicon-link"></span></a>Definitions from OCDS</h3>
+<a id="ocds-definitions" class="anchor" href="#ocds-definitions" aria-hidden="true"><span class="octicon octicon-link"></span></a>OCDS Definitions</h3>
 
 <p>Information about an Open Contracting Process may accumulate over time. As a result, the Open Contracting Data Standard provides for two kinds of data:
-1. <strong>Contracting releases</strong> - each release provides information pertaining to a particular stage in the contracting process - such as tender notices, award notices, or details of a finalized contract.
-2. <strong>Contracting record</strong> - A contracting record provides a snapshot of all the key elements of a unique contracting process, including its planning, formation, performance and completion.</p>
+1. <strong>Contracting release</strong> - Information pertaining to a particular stage in the contracting process - such as tender notices, award notices, or details of a finalized contract.
+2. <strong>Contracting record</strong> - A snapshot of all the key elements of a unique contracting process, including its planning, formation, performance and completion.</p>
 
 <p>Both <strong>contracting releases</strong> and <strong>contracting records</strong> are provided within data packages, containing meta-data about the publisher, publication data and licensing information.</p>
 
 <h2>
-<a name="2-records-api" class="anchor" href="#2-records-api"><span class="octicon octicon-link"></span></a>2. Records API</h2>
+<a id="2-records-api" class="anchor" href="#2-records-api" aria-hidden="true"><span class="octicon octicon-link"></span></a>2. Records API</h2>
 
-<p>This API can be used to generate record packages or to retrieve individual <em>record</em> information. It is build to be flexible and with the help of the <em>filters</em> users can slice the data and drill down the results.</p>
+<p>This API can be used to generate record packages or to retrieve individual <em>record</em> information. With the help of <em>filters</em> users can slice the data and drill down the results.</p>
 
 <h3>
-<a name="basic-call-and-parameters" class="anchor" href="#basic-call-and-parameters"><span class="octicon octicon-link"></span></a>Basic call and parameters</h3>
+<a id="basic-call-and-parameters" class="anchor" href="#basic-call-and-parameters" aria-hidden="true"><span class="octicon octicon-link"></span></a>Basic call and parameters</h3>
 
 <pre><code>http://www.contractawards.eu/open-contracting/api/v1/record-package?&lt;filters&gt;
 </code></pre>
@@ -93,48 +95,48 @@
 
 <ul>
 <li>
-<code>supplier</code> - this represents the supplier name; Ex: <em>Acciona infraestructuras</em>
+<code>supplier</code> - Supplier name, e.g., <em>Acciona infraestructuras</em>
 </li>
 <li>
-<code>buyer</code> - this represents the buyer name; Ex: <em>ADMINISTRADOR DE INFRAESTRUCTURAS FERROVIARIAS</em>
+<code>buyer</code> - Buyer name, e.g., <em>ADMINISTRADOR DE INFRAESTRUCTURAS FERROVIARIAS</em>
 </li>
 <li>
-<code>sector</code> - the name of the sector; Ex: <em>Transport services</em>
+<code>item</code> - Sector, should be an object, e.g., <em>{"classificationScheme": "CPV", "classificationID": "45000000", "classificationDescription": "Construction work"}</em>
 </li>
 <li>
-<code>year</code> - Ex: <em>2012</em>
+<code>year</code> - Year, e.g., <em>2012</em>
 </li>
 <li>
-<code>procedure</code> - Ex: <em>Service contract</em>
+<code>contractType</code> - Contract Type, e.g., <em>Service contract</em>
 </li>
 <li>
-<code>awardCriteria</code> - Ex: <em>Lowest price</em>
+<code>awardCriteria</code> - Award criteria, e.g, <em>Lowest price</em>
 </li>
 <li>
-<code>buyerCountry</code> - Ex: <em>Germany</em>
-</li>
+<code>buyerCountry</code> - 2 digits country code, e.g., <em>de</em> for Germany </li>
 <li>
-<code>supplierCountry</code> - Ex: <em>Italy</em>
-</li>
+<code>supplierCountry</code> - 2 digits country code, e.g., <em>it</em> for Italy</li>
 </ul>
 
-<p>Please note that the last 6 criteria: <code>sector</code>, <code>year</code>, <code>procedure</code>, <code>awardCriteria</code>, <code>buyerCountry</code> and <code>supplierCountry</code> need to be valid. You can check if one of these criteria is valid by invoking the <strong>Metadata API</strong>.</p>
+<p>Please note that the last 6 criteria (<code>sector</code>, <code>year</code>, <code>contractType</code>, <code>awardCriteria</code>, <code>buyerCountry</code> and <code>supplierCountry</code>) need to be valid. You can check the validity by invoking the <strong>Metadata API</strong>.</p>
 
 <p><strong>Request pagination</strong></p>
 
-<p>In order to limit the response size and to allow a better manipulation of the data each request accepts the following parameters:</p>
+<p>Each request accepts the following parameters:</p>
 
 <ul>
 <li>
 <code>page</code> – page number</li>
 <li>
-<code>pageSize</code> – number of records per page; the default value is 100 and it can not be greater that 1000</li>
+<code>pageSize</code> – number of records per page; the default value is 100 and it cannot be greater than 1000</li>
 </ul>
 
-<pre><code>http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2008&amp;buyerCountry=Germany&amp;page=10&amp;pageSize=10
+<p>For example,</p>
+
+<pre><code>http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2008&amp;buyerCountry=Germany&amp;page=10&amp;pageSize=20
 </code></pre>
 
-<p>In the above example you will get the 10th page and 10 records.</p>
+<p>The example above returns the 10th 20-record page.</p>
 
 <pre><code>http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2008&amp;supplierCountry=France&amp;page=1&amp;pageSize=50
 </code></pre>
@@ -143,28 +145,24 @@
 </code></pre>
 
 <h3>
-<a name="rules-for-invoking-the-filter-api" class="anchor" href="#rules-for-invoking-the-filter-api"><span class="octicon octicon-link"></span></a>Rules for invoking the Filter API</h3>
+<a id="limitation-of-the-filter-api-implementation" class="anchor" href="#limitation-of-the-filter-api-implementation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Limitation of the Filter API implementation</h3>
 
 <ol>
 <li> Supplier name and buyer name reset all other parameters, in other words if one of the <code>supplier</code> or <code>buyer</code> parameter is present all other parameters will be ignored.</li>
-<li> All other parameters (<code>sector</code>, <code>year</code>, <code>procedure</code>, <code>awardCriteria</code>, <code>buyerCountry</code>, <code>supplierCountry</code>) can be combined in any order with the condition that at least two criteria from the aforementioned list be used</li>
-<li> The <em>HTTP Method</em> for all request should be <strong>GET</strong>
-</li>
+<li> All other parameters (<code>sector</code>, <code>year</code>, <code>procedure</code>, <code>awardCriteria</code>, <code>buyerCountry</code>, <code>supplierCountry</code>) can be combined in any order with the condition that at least two criteria from the aforementioned list be used.</li>
 </ol>
 
 <h3>
-<a name="limiting-release-content-that-is-returned-by-the-api" class="anchor" href="#limiting-release-content-that-is-returned-by-the-api"><span class="octicon octicon-link"></span></a>Limiting release content that is returned by the API</h3>
+<a id="release-content-returned-by-the-api" class="anchor" href="#release-content-returned-by-the-api" aria-hidden="true"><span class="octicon octicon-link"></span></a>Release content returned by the API</h3>
 
-<p><strong>Open Contracting Data Standard</strong> allows a release to be displayed in 2 ways in a record package:</p>
+<p>There two ways to include a release into a record package:</p>
 
 <ul>
-<li>as a URI having a unique <em>releaseID</em> that contains the actual information about the release</li>
-<li>embed the actual release contend(the same content that can be obtain using the first method), but with this method the response size will be much larger</li>
+<li>as a URI pointing to the release</li>
+<li>as the actual release content by inserting <code>embed=true</code> parameter.</li>
 </ul>
 
-<p>Having this in consideration and the fact that an API consumer doesn’t always need the full representation of a release the user can use the <code>embed=true</code> parameter in order to minimize network traffic and speed up the usage of the <strong>Records API</strong>.</p>
-
-<p>For example, the following request would retrieve just the basic information about a record package but it will also have the releases URI that can be further used to retrieve the releases content:</p>
+<p>For example, the following request would retrieve just basic information about a record package, with release URIs that can be called to obtain the actual release information:</p>
 
 <pre><code>GET http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2012&amp;embed=true
 
@@ -194,76 +192,76 @@
 </code></pre>
 
 <h3>
-<a name="getting-a-single-record" class="anchor" href="#getting-a-single-record"><span class="octicon octicon-link"></span></a>Getting a single record</h3>
+<a id="obtaining-a-single-record" class="anchor" href="#obtaining-a-single-record" aria-hidden="true"><span class="octicon octicon-link"></span></a>Obtaining a single record</h3>
 
-<p>Each record has a unique <strong>Open Contracting ID</strong> called <code>ocid</code> (<a href="http://ocds.open-contracting.org/standard/r/0__3__3/#conceptual-model">http://ocds.open-contracting.org/standard/r/0__3__3/#conceptual-model</a>) and sometimes it is useful not to see the big picture but only the informations about a particular record so the user can do that by using the following API:</p>
+<p>Each record has a unique <strong>Open Contracting ID</strong> called <code>ocid</code> (<a href="http://ocds.open-contracting.org/standard/r/0__3__3/#conceptual-model">http://ocds.open-contracting.org/standard/r/0__3__3/#conceptual-model</a>). A particular record can be retrieves via the following API:</p>
 
 <pre><code>http://www.contractawards.eu/open-contracting/api/v1/record?recordId=&lt;ocid&gt;
 </code></pre>
 
 <h3>
-<a name="pretty-print-format" class="anchor" href="#pretty-print-format"><span class="octicon octicon-link"></span></a>Pretty print format</h3>
+<a id="pretty-print-format" class="anchor" href="#pretty-print-format" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pretty print format</h3>
 
-<p>By default the API provides pretty printing of the JSON output because it’s more approachable but in a production application the user can reduce the cost of the data transfer by using the parameter <code>pretty=false</code> in order to remove all the white spaces from the response.</p>
+<p>By default, the API provides pretty printing of the JSON output. In a production application a user can reduce the cost of  data transfer by using the parameter <code>pretty=false</code> in order to remove all the white spaces from the response.</p>
 
 <h3>
-<a name="records-api-response" class="anchor" href="#records-api-response"><span class="octicon octicon-link"></span></a>Records API Response</h3>
+<a id="records-api-response" class="anchor" href="#records-api-response" aria-hidden="true"><span class="octicon octicon-link"></span></a>Records API Response</h3>
 
-<p>The response fields for the package records are explained in more detailed below</p>
+<p>Records contain the following information:</p>
 
 <ul>
 <li>
-<code>uri</code> - the URI of this records package</li>
+<code>uri</code> - URI of the records package</li>
 <li>
-<code>publisher</code> - information to uniquely identify the publisher of this package</li>
+<code>publisher</code> - information that uniquely identifies the publisher of this package</li>
 <li>
-<code>publishedDate</code> - the date that this package was published.</li>
+<code>publishedDate</code> -package publication date</li>
 <li>
-<code>packages</code> - a list of URIs of all the release packages that were used to create this record package</li>
+<code>packages</code> - a list of URIs of release packages included in the record package</li>
 <li>
-<code>records</code> - the records for this data package</li>
+<code>records</code> - records included in this records package</li>
 </ul>
 
 <h2>
-<a name="3-releases-api" class="anchor" href="#3-releases-api"><span class="octicon octicon-link"></span></a>3. Releases API</h2>
+<a id="3-releases-api" class="anchor" href="#3-releases-api" aria-hidden="true"><span class="octicon octicon-link"></span></a>3. Releases API</h2>
 
-<p>This API can be used to obtain informations about a package release or a particular release. It can be useful to obtain more  information about a particular stage in the contracting process or if the user is using the <code>embed=true</code> parameter in the <strong>Records API</strong> and then he wants to get the content of the releases.</p>
+<p>This API provides information about a package release or a single release. It can be used to obtain information related to a particular stage in the contracting process.</p>
 
 <h3>
-<a name="basic-call-and-parameters-1" class="anchor" href="#basic-call-and-parameters-1"><span class="octicon octicon-link"></span></a>Basic call and parameters</h3>
+<a id="basic-call-and-parameters-1" class="anchor" href="#basic-call-and-parameters-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Basic call and parameters</h3>
+
+<p>Obtain a release package:</p>
 
 <pre><code>http://www.contractawards.eu/open-contracting/api/v1/release-package?releaseId=&lt;id&gt;
 </code></pre>
 
-<p>It can be used to get the release package with the given <code>id</code>.</p>
+<p>Obtain an individual releaze:</p>
 
 <pre><code>http://www.contractawards.eu/open-contracting/api/v1/release?releaseId=&lt;id&gt;
 </code></pre>
 
-<p>It can be used to get only one release content with the given <code>id</code>.</p>
-
-<p><strong>Pretty format</strong> - the <strong>Release API</strong> supports the same <code>pretty=false</code> parameter as <strong>Records API</strong> in order to get a white-space compressed response.</p>
+<p><strong>Pretty format</strong> - the <strong>Release API</strong> supports the same <code>pretty=false</code> parameter as <strong>Records API</strong>; it triggers white-space compression of the response.</p>
 
 <h3>
-<a name="release-api-response" class="anchor" href="#release-api-response"><span class="octicon octicon-link"></span></a>Release API Response</h3>
+<a id="release-api-response" class="anchor" href="#release-api-response" aria-hidden="true"><span class="octicon octicon-link"></span></a>Release API Response</h3>
 
-<p>The response fields for a release are explained in more detailed below</p>
+<p>Releases contain the following information:</p>
 
 <ul>
 <li>
-<code>ocid</code> - A unique identifier that identifies the unique Open Contracting Process</li>
+<code>ocid</code> - A unique identifier of an Open Contracting Process (the same ID can be used for <code>noticeID</code> and <code>TenderID</code> should always have the same value as OCID)</li>
 <li>
-<code>releaseID</code> - A unique identifier that identifies this release</li>
+<code>releaseID</code> - A unique release identifier</li>
 <li>
-<code>releaseDate</code> - The date this information is released, it may well be the same as the parent publishedDate</li>
+<code>releaseDate</code> - The date this information was released</li>
 <li>
-<code>releaseTag</code> - A tag that helps to identify the type of data in the dataset (it should be <em>awardNotice</em>)</li>
+<code>releaseTag</code> - A tag that helps to identify the type of data in the dataset (e.e, <em>awardNotice</em>)</li>
 <li>
-<code>language</code> - Specifies the default language of the data</li>
+<code>language</code> - The default language of the data returned</li>
 <li>
-<code>formationType</code> - String specifying the type of formation process used for this contract(it should be <em>tender</em>)</li>
+<code>formationType</code> - String specifying the type of formation process used for this contract(should be <em>tender</em>)</li>
 <li>
-<code>buyer</code> - The buyer is the entity whose budget will be used to purchase the goods.
+<code>buyer</code> - An entity that procures goods, works or services.
 
 <ul>
 <li>
@@ -287,13 +285,13 @@
 </ul>
 </li>
 <li>
-<code>tender</code> - The activities undertaken in order to enter into a contract.
+<code>tender</code> - Activities undertaken in order to enter into a contract.
 
 <ul>
 <li>
 <strong>tenderID</strong> - TenderID should always be the same as the OCID.</li>
 <li>
-<strong>notice</strong> - The notice is a published document that notifies the public at various stages of the contracting process
+<strong>notice</strong> - A notice is a public document that notifies the public about various stages of the contracting process
 
 <ul>
 <li><em>id</em></li>
@@ -324,11 +322,10 @@
 </ul>
 </li>
 <li>
-<code>awards</code> - Information from the award phase of the contracting process
+<code>awards</code> - Information related to the award phase of the contracting process
 
 <ul>
-<li>
-<strong>awardID</strong> - The identifier for this award</li>
+<li><strong>awardID</strong></li>
 <li>
 <strong>notice</strong>
 
@@ -339,7 +336,7 @@
 </ul>
 </li>
 <li>
-<strong>awardValue</strong> - The total value of this award
+<strong>awardValue</strong>
 
 <ul>
 <li><em>amount</em></li>
@@ -347,7 +344,7 @@
 </ul>
 </li>
 <li>
-<strong>suppliers</strong> - The suppliers awarded this award
+<strong>suppliers</strong> - The awarded suppliers
 
 <ul>
 <li>
@@ -371,7 +368,7 @@
 </ul>
 </li>
 <li>
-<strong>itemsAwarded</strong> - The goods and services awarded in this award, broken into line items wherever possible
+<strong>itemsAwarded</strong> - The goods and services included in the awarded contract, broken into line items wherever possible
 
 <ul>
 <li><em>description</em></li>
@@ -382,24 +379,57 @@
 </li>
 </ul>
 </li>
+<li>
+<code>planning</code> - Information from the planning phase of the contracting process.
+
+<ul>
+<li><strong>budgetID</strong></li>
+<li><strong>budgetAmount</strong></li>
+<li><strong>publicHearingNotice</strong></li>
+<li><strong>strategicJustificiation</strong></li>
+<li><strong>anticipatedMilestones</strong></li>
+</ul>
+</li>
+<li>
+<code>contracts</code> - Information from the contract creation phase of the procurement process.
+
+<ul>
+<li><strong>contractID</strong></li>
+<li><strong>awardID</strong></li>
+<li><strong>contractPeriod</strong></li>
+<li><strong>contractValue</strong></li>
+<li><strong>signatureDate</strong></li>
+<li><strong>itemsContracted</strong></li>
+<li><strong>attachments</strong></li>
+</ul>
+</li>
+<li>
+<code>performance</code> - Information related to the implementation of the contract in accordance with the obligations laid out therein.
+
+<ul>
+<li><strong>transactionDataPackageURI</strong></li>
+<li><strong>transactionID</strong></li>
+<li><strong>transactionAmount</strong></li>
+</ul>
+</li>
 </ul>
 
 <h2>
-<a name="4-metadata-api" class="anchor" href="#4-metadata-api"><span class="octicon octicon-link"></span></a>4. Metadata API</h2>
+<a id="4-metadata-api" class="anchor" href="#4-metadata-api" aria-hidden="true"><span class="octicon octicon-link"></span></a>4. Metadata API</h2>
 
 <p><strong>Getting filters metadata</strong></p>
 
-<p>This API is used to get information about the <code>filters</code> that can be used with the <strong>Records API</strong></p>
+<p>This API returns information about <code>filters</code> that can be used to query <strong>Records API</strong></p>
 
 <h3>
-<a name="basic-call-and-parameters-2" class="anchor" href="#basic-call-and-parameters-2"><span class="octicon octicon-link"></span></a>Basic call and parameters</h3>
+<a id="basic-call-and-parameters-2" class="anchor" href="#basic-call-and-parameters-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>Basic call and parameters</h3>
 
 <pre><code>GET /open-contracting/api/v1/&lt;dataset&gt;
 </code></pre>
 
-<p>Calls will return information about the <code>dataset</code> and all valid values that can be used. If a value is not returned, for example year 2000, this means that we don’t have contracts published in 2000.</p>
+<p>This call returns information about a <code>dataset</code> and all valid values that can be used to query it. If a value is not returned, for example, year 2001, then it means that there are no contracts published in 2001.</p>
 
-<p>Possible values for <code>dataset</code>:</p>
+<p>Possible <code>dataset</code> values include:</p>
 
 <ul>
 <li>
@@ -407,26 +437,26 @@
 <li>
 <code>buyerCountries</code> - returns all buyer countries</li>
 <li>
-<code>supplierCountries</code> - returns supplier countries</li>
+<code>supplierCountries</code> - returns all supplier countries</li>
 <li>
-<code>sectors</code> - returns the main sector of the contract</li>
+<code>sectors</code> - returns all sectors</li>
 <li>
-<code>procedures</code> - returns the procedures (Service contract, Works)</li>
+<code>contractType</code> - returns all  contract types (e.g., Service contract, Works)</li>
 <li>
-<code>awardCriteria</code> - returns the awarding criteria (Lowest price, The most economic tender)</li>
+<code>awardCriteria</code> - returns all award criteria (Lowest price, The most economic tender, etc.)</li>
 </ul>
 
 <h4>
-<a name="response-example" class="anchor" href="#response-example"><span class="octicon octicon-link"></span></a>Response example</h4>
+<a id="response-example" class="anchor" href="#response-example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Response example</h4>
 
 <pre><code>GET http://www.contractawards.eu/open-contracting/api/v1/years
 
 {
-  hits: [2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013]
+hits: [2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013]
 }
 </code></pre>
 
-<p>The above response will be available in a web browser, but if the user uses ajax, then a possible way to get all the years that can be used to filter the data will be:</p>
+<p>The above response can be viewed in a web browser. When using Ajax, one can obtain a list of years in a dataset as follows:</p>
 
 <pre><code>$.ajax({
     type: 'GET',
@@ -438,43 +468,43 @@
 </code></pre>
 
 <h2>
-<a name="5-versioning" class="anchor" href="#5-versioning"><span class="octicon octicon-link"></span></a>5. Versioning</h2>
+<a id="5-versioning" class="anchor" href="#5-versioning" aria-hidden="true"><span class="octicon octicon-link"></span></a>5. Versioning</h2>
 
-<p>Change is inevitable so we decided to implement a versioning API that will help us to iterate faster and prevent invalid requests. This will also allow us to easily adopt new version of the OCDS standard and continue to offer old API versions for a period of time. The version are identified as <code>/api/v1/</code>, <code>api/v2/</code> and so on.</p>
+<p>Change is inevitable, and the versioning API helps iterate faster and prevent invalid requests. This also allows to adopt new version of OCDS standard while continuing to support old API versions for a some time. Versions are identified as <code>/api/v1/</code>, <code>api/v2/</code> and so on.</p>
 
 <h2>
-<a name="6-errors" class="anchor" href="#6-errors"><span class="octicon octicon-link"></span></a>6. Errors</h2>
+<a id="6-errors" class="anchor" href="#6-errors" aria-hidden="true"><span class="octicon octicon-link"></span></a>6. Errors</h2>
 
-<p>In case of an error(client issue of server issue) we will return a response with a JSON error body that will provide:  a useful error message, a unique error code that can be looked up for a detailed description in the documentation and the URL that cause the error. For example:</p>
+<p>In case of an error (on client or server side) a response will contain JSON error body that provides:  a useful error message, an error code, and the URL that caused the error. For example:</p>
 
 <pre><code>{
-  "errors": [
-   {
-    "code" : 1024,
-    "message": "Sorry, the requested resource does not exist"
-    "url": "http://www.contractawards.eu/open-contracting/api/v1/release?id=156809-2006"
-   }
-  ]
+    "errors": [
+        {
+            "code" : 1024,
+            "message": "Sorry, the requested resource does not exist"
+            "url": "http://www.contractawards.eu/open-contracting/api/v1/release?id=156809-2006"
+        }
+    ]
 }
 </code></pre>
 
 <p>or</p>
 
 <pre><code>{
-  "errors": [
-   {
-    "code" : 1020,
-    "message": " You should use at least 2 criteria from the following list of filters: sector, year, procedure, awardCriteria, buyerCountry, supplierCountry"
-    "url": "http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2012"
-   }
-  ]
+    "errors": [
+        {
+            "code" : 1020,
+            "message": " You should use at least 2 criteria from the following list of filters: sector, year, procedure, awardCriteria, buyerCountry, supplierCountry"
+            "url": "http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2012"
+        }
+    ]
 } 
 </code></pre>
 
 <h2>
-<a name="7-possible-response" class="anchor" href="#7-possible-response"><span class="octicon octicon-link"></span></a>7. Possible response</h2>
+<a id="7-examples" class="anchor" href="#7-examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>7. Examples</h2>
 
-<p>In order to have a complete picture on the response that you can get by calling the <strong>Records API</strong> you can take a look at the following example.</p>
+<p>The following is an example of <strong>Records API</strong> response:</p>
 
 <pre><code>{
     "uri": "http://www.contractawards.eu/open-contracting/api/v1/record-package/{filters}",
