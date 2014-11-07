@@ -118,7 +118,7 @@
 <code>supplierCountry</code> - 2 digits country code, e.g., <em>it</em> for Italy</li>
 </ul>
 
-<p>Please note that the last 6 criteria (<code>sector</code>, <code>year</code>, <code>contractType</code>, <code>awardCriteria</code>, <code>buyerCountry</code> and <code>supplierCountry</code>) need to be valid. You can check the validity by invoking the <strong>Metadata API</strong>.</p>
+<p>Please note that the last 6 criteria (<code>item</code>, <code>year</code>, <code>contractType</code>, <code>awardCriteria</code>, <code>buyerCountry</code> and <code>supplierCountry</code>) need to be valid. You can check the validity by invoking the <strong>Metadata API</strong>.</p>
 
 <p><strong>Request pagination</strong></p>
 
@@ -141,7 +141,7 @@
 <pre><code>http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2008&amp;supplierCountry=France&amp;page=1&amp;pageSize=50
 </code></pre>
 
-<pre><code>http://www.contractawards.eu/open-contracting/api/v1/record-package?sector=Construction work&amp;procedure=Service contract&amp;year=2012&amp;page=1&amp;pageSize=1000
+<pre><code>http://www.contractawards.eu/open-contracting/api/v1/record-package?item={"classificationScheme": "CPV", "classificationID": "45000000", "classificationDescription": "Construction work"}&amp;procedure=Service contract&amp;year=2012&amp;page=1&amp;pageSize=1000
 </code></pre>
 
 <h3>
@@ -149,7 +149,7 @@
 
 <ol>
 <li> Supplier name and buyer name reset all other parameters, in other words if one of the <code>supplier</code> or <code>buyer</code> parameter is present all other parameters will be ignored.</li>
-<li> All other parameters (<code>sector</code>, <code>year</code>, <code>procedure</code>, <code>awardCriteria</code>, <code>buyerCountry</code>, <code>supplierCountry</code>) can be combined in any order with the condition that at least two criteria from the aforementioned list be used.</li>
+<li> All other parameters (<code>item</code>, <code>year</code>, <code>procedure</code>, <code>awardCriteria</code>, <code>buyerCountry</code>, <code>supplierCountry</code>) can be combined in any order with the condition that at least two criteria from the aforementioned list be used.</li>
 </ol>
 
 <h3>
@@ -439,7 +439,7 @@
 <li>
 <code>supplierCountries</code> - returns all supplier countries</li>
 <li>
-<code>sectors</code> - returns all sectors</li>
+<code>items</code> - returns all sectors</li>
 <li>
 <code>contractType</code> - returns all  contract types (e.g., Service contract, Works)</li>
 <li>
@@ -494,7 +494,7 @@ hits: [2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013]
     "errors": [
         {
             "code" : 1020,
-            "message": " You should use at least 2 criteria from the following list of filters: sector, year, procedure, awardCriteria, buyerCountry, supplierCountry"
+            "message": " You should use at least 2 criteria from the following list of filters: item, year, procedure, awardCriteria, buyerCountry, supplierCountry"
             "url": "http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2012"
         }
     ]
