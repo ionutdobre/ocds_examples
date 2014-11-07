@@ -37,6 +37,7 @@ All requests should have the type **GET**.
 
 ### OCDS Definitions
 Information about an Open Contracting Process may accumulate over time. As a result, the Open Contracting Data Standard provides for two kinds of data:
+
 1. **Contracting release** - Information pertaining to a particular stage in the contracting process - such as tender notices, award notices, or details of a finalized contract.
 
 2. **Contracting record** - A snapshot of all the key elements of a unique contracting process, including its planning, formation, performance and completion.
