@@ -11,13 +11,12 @@ This document provides a description of the APIs and examples of their use.
 4. Metadata API
 5. Versioning
 6. Errors
-7. Possible response
+7. Examples
 
 ## 1. API Conventions
 
 ### Authentication and Usage Limits
-OCDS API doesn’t require any kind of authentication. 
-Users can send as many requests as they want, the only limitation will be the number of records returned; in this way we encourage developers to use pagination in order to iterate through all of the requested data.
+OCDS API doesn’t require any kind of authentication.Users can send as many requests as they want, the only limitation will be the number of records returned; in this way we encourage developers to use pagination in order to iterate through all of the requested data.
 
 ### JSON Callbacks
 **OCDS API** is explorable via a browser address bar for testing purposes. In a real application you can use AJAX or JSON-P callbacks in order to query the system and *consume* the response:
@@ -31,6 +30,8 @@ $.ajax({
 	}
 });
 ```
+
+*You should be aware that http://www.contractawards.eu web application supports the OCDS standard but it is not part of the standard*.
 
 All requests should have the type **GET**.
 
@@ -53,14 +54,14 @@ http://www.contractawards.eu/open-contracting/api/v1/record-package?<filters>
 The following parameters (```filters```) are supported:
 * ```supplier``` - Supplier name, e.g., *Acciona infraestructuras*
 * ```buyer``` - Buyer name, e.g., *ADMINISTRADOR DE INFRAESTRUCTURAS FERROVIARIAS*
-* ```sector``` - Sector, e.g., *Transport services*(!)
+* ```item``` - Sector, should be an object, e.g., *{"classificationScheme": "CPV", "classificationID": "45000000", "classificationDescription": "Construction work"}*
 * ```year``` - Year, e.g., *2012*
-* ```procedure``` - Tendering procedure, e.g., *Service contract* (!)
+* ```contractType``` - Contract Type, e.g., *Service contract*
 * ```awardCriteria``` - Award criteria, e.g, *Lowest price*
-* ```buyerCountry``` - e.g., *Germany* (!)
-* ```supplierCountry``` - e.g., *Italy* (!)
+* ```buyerCountry``` - 2 digits country code, e.g., *de* for Germany 
+* ```supplierCountry``` - 2 digits country code, e.g., *it* for Italy
 
-Please note that the last 6 criteria (```sector```, ```year```, ```procedure```, ```awardCriteria```, ```buyerCountry``` and ```supplierCountry```) need to be valid. You can check the validity by invoking the **Metadata API**.
+Please note that the last 6 criteria (```sector```, ```year```, ```contractType ```, ```awardCriteria```, ```buyerCountry``` and ```supplierCountry```) need to be valid. You can check the validity by invoking the **Metadata API**.
 
 **Request pagination**
 
@@ -68,7 +69,7 @@ Each request accepts the following parameters:
 * ```page``` – page number
 * ```pageSize``` – number of records per page; the default value is 100 and it cannot be greater than 1000
 
-For example, 
+For example,
 ```
 http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2008&buyerCountry=Germany&page=10&pageSize=20
 ```
@@ -83,9 +84,10 @@ http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2008&su
 http://www.contractawards.eu/open-contracting/api/v1/record-package?sector=Construction work&procedure=Service contract&year=2012&page=1&pageSize=1000
 ```
 
-### Rules for invoking the Filter API
-1.	Supplier name and buyer name reset all other parameters, in other words if one of the ```supplier``` or ```buyer``` parameter is present all other parameters will be ignored. (!)
-2.	All other parameters (```sector```, ```year```, ```procedure```, ```awardCriteria```, ```buyerCountry```, ```supplierCountry```) can be combined in any order with the condition that at least two criteria from the aforementioned list be used. (!)
+### Limitation of the Filter API implementation
+
+1.	Supplier name and buyer name reset all other parameters, in other words if one of the ```supplier``` or ```buyer``` parameter is present all other parameters will be ignored.
+2.	All other parameters (```sector```, ```year```, ```procedure```, ```awardCriteria```, ```buyerCountry```, ```supplierCountry```) can be combined in any order with the condition that at least two criteria from the aforementioned list be used.
 
 ### Release content returned by the API
 There two ways to include a release into a record package:
@@ -98,27 +100,27 @@ For example, the following request would retrieve just basic information about a
 GET http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2012&embed=true
 
 {
-    "uri": "http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2012”,
-    "publisher": {
-        "name": "Development Gateway"
-    },
-    "license": "http://opensource.org/licenses/MIT",
-    "publishedDate": "2012-09-14T04:28:58-0400",
-    "packages": [
-        "http://www.contractawards.eu/open-contracting/api/v1/release-package/releaseID1"
-    ],
-    "records": [
-        {
-            "ocid": "1234-5678",
-            "releases": [
-                {
-                    "name": "releaseID1",
-                    "uid": "releaseID",
-                    "uri": "http://www.contractawards.eu/open-contracting/api/v1/release/releaseID1"
-                }
-            ]
-        }
-    ]
+	"uri": "http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2012”,
+	"publisher": {
+		"name": "Development Gateway"
+	},
+	"license": "http://opensource.org/licenses/MIT",
+	"publishedDate": "2012-09-14T04:28:58-0400",
+	"packages": [
+		"http://www.contractawards.eu/open-contracting/api/v1/release-package/releaseID1"
+	],
+	"records": [
+		{
+			"ocid": "1234-5678",
+			"releases": [
+				{
+					"name": "releaseID1",
+					"uid": "releaseID",
+					"uri": "http://www.contractawards.eu/open-contracting/api/v1/release/releaseID1"
+				}
+			]
+		}
+	]
 }
 ```
 
@@ -162,7 +164,7 @@ http://www.contractawards.eu/open-contracting/api/v1/release?releaseId=<id>
 ### Release API Response
 Releases contain the following information:
 
-* ```ocid``` - A unique identifier of an Open Contracting Process (!)
+* ```ocid``` - A unique identifier of an Open Contracting Process (the same ID can be used for ```noticeID``` and ```TenderID``` should always have the same value as OCID)
 * ```releaseID``` - A unique release identifier
 * ```releaseDate``` - The date this information was released
 * ```releaseTag``` - A tag that helps to identify the type of data in the dataset (e.e, *awardNotice*)
@@ -192,8 +194,7 @@ Releases contain the following information:
 		* *amount*
 		* *currency*
 	* **numberOfBids** - The number of unique bidders who participated in the tender
-
-* ```awards``` - Information related to the award phase of the contracting process (!)
+* ```awards``` - Information related to the award phase of the contracting process
 	* **awardID**
 	* **notice**
 		* *id*
@@ -216,6 +217,24 @@ Releases contain the following information:
 		* *classificationScheme*
 		* *classificationID*
 		* *classificationDescription*
+* ```planning``` - Information from the planning phase of the contracting process.
+	* **budgetID**
+	* **budgetAmount**
+	* **publicHearingNotice**
+	* **strategicJustificiation**
+	* **anticipatedMilestones**
+* ```contracts``` - Information from the contract creation phase of the procurement process.
+	* **contractID**
+	* **awardID**
+	* **contractPeriod**
+	* **contractValue**
+	* **signatureDate**
+	* **itemsContracted**
+	* **attachments**
+* ```performance``` - Information related to the implementation of the contract in accordance with the obligations laid out therein.
+	* **transactionDataPackageURI**
+	* **transactionID**
+	* **transactionAmount**
 
 ## 4. Metadata API
 
@@ -235,7 +254,7 @@ Possible ```dataset``` values include:
 * ```buyerCountries``` - returns all buyer countries
 * ```supplierCountries``` - returns all supplier countries
 * ```sectors``` - returns all sectors
-* ```procedures``` - returns all  procedures (e.g., Service contract, Works) (!)
+* ```contractType``` - returns all  contract types (e.g., Service contract, Works)
 * ```awardCriteria``` - returns all award criteria (Lowest price, The most economic tender, etc.)
 
 #### Response example
@@ -243,7 +262,7 @@ Possible ```dataset``` values include:
 GET http://www.contractawards.eu/open-contracting/api/v1/years
 
 {
-  hits: [2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013]
+hits: [2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013]
 }
 ```
 
@@ -269,26 +288,26 @@ In case of an error (on client or server side) a response will contain JSON erro
 
 ```
 {
-  "errors": [
-   {
-    "code" : 1024,
-    "message": "Sorry, the requested resource does not exist"
-    "url": "http://www.contractawards.eu/open-contracting/api/v1/release?id=156809-2006"
-   }
-  ]
+	"errors": [
+		{
+			"code" : 1024,
+			"message": "Sorry, the requested resource does not exist"
+			"url": "http://www.contractawards.eu/open-contracting/api/v1/release?id=156809-2006"
+		}
+	]
 }
 ```
 or
 
 ```
 {
-  "errors": [
-   {
-    "code" : 1020,
-    "message": " You should use at least 2 criteria from the following list of filters: sector, year, procedure, awardCriteria, buyerCountry, supplierCountry" (!)
-    "url": "http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2012"
-   }
-  ]
+	"errors": [
+		{
+			"code" : 1020,
+			"message": " You should use at least 2 criteria from the following list of filters: sector, year, procedure, awardCriteria, buyerCountry, supplierCountry"
+			"url": "http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2012"
+		}
+	]
 } 
 ```
 
@@ -298,92 +317,92 @@ The following is an example of **Records API** response:
 
 ```
 {
-    "uri": "http://www.contractawards.eu/open-contracting/api/v1/record-package/{filters}",
-    "publisher": {
-        "name": "Development Gateway"
-    },
-    "license": "http://opensource.org/licenses/MIT",
-    "publishedDate": "2006-09-14T04:28:58-0400",
-    "packages": [
-        "http://www.contractawards.eu/open-contracting/api/v1/release-package/releaseID1",
-        "http://www.contractawards.eu/open-contracting/api/v1/release-package/releaseID2",
-        "http://www.contractawards.eu/open-contracting/api/v1/release-package/releaseID3"
-    ],
-    "records": [
-        {
-            "ocid": "1234-5678",
-            "releases": [
-                {
-                    "ocid": "1234-5678",
-                    "releaseID": "releaseID-1234-5678",
-                    "releaseDate": "2006-09-14T04:28:58-0400",
-                    "releaseTag": "awardNotice",
-                    "language": "en",
-                    "formationType": "tender",
-                    "buyer": {
-                        "id": {
-                            "name": "CONSEIL GÉNÉRAL DE L'YONNE",
-                            "uid": "6490828",
-                            "uri": "http://www.dgmarket.com/tenders/adminShowBuyer.do?buyerId=6490828"
-                        },
-                        "address": {
-                            "locality": "Paris",
-                            "region": "Paris",
-                            "country-name": "France"
-                        }
-                    },
-                    "tender": {
-                        "tenderID": "1219083",
-                        "notice": {
-                            "id": "1234-5678",
-                            "uri": "http://www.dgmarket.com/tenders/np-notice.do?noticeId=1219083",
-                            "publishedDate": "2006-03-21T00:00:00-0500"
-                        },
-                        "itemsToBeProcured": [{
-                            "description": "Construction work",
-                            "classificationScheme": "CPV",
-                            "classificationID": "45000000",
-                            "classificationDescription": "Construction work"
-                        }],
-                        "totalValue": {
-                            "amount": 100000,
-                            "currency": "EUR"
-                        },
-                        "numberOfBids": 3
-                    },
-                    "awards": [{
-                        "awardID": "1129358",
-                        "notice": {
-                            "id": "1234-5678",
-                            "uri": "http://www.dgmarket.com/tenders/np-notice.do?noticeId=1219083",
-                            "publishedDate": "2006-03-21T00:00:00-0500"
-                        },
-                        "awardValue": {
-                            "amount": 100000,
-                            "currency": "EUR"
-                        },
-                        "suppliers": [{
-                            "id": {
-                                "name": "Divers organismes",
-                                "uid": "123",
-                                "uri": "http://www.contractawards.eu/#!supplier=Divers+organismes"
-                            },
-                            "address": {
-                                "locality": "Bucharest",
-                                "region": "Ilfov",
-                                "country-name": "Romania"
-                            }
-                        }],
-                        "itemsAwarded": [{
-                            "description": "Construction work",
-                            "classificationScheme": "CPV",
-                            "classificationID": "45000000",
-                            "classificationDescription": "Construction work"
-                        }]
-                    }]
-                }
-            ]
-        }
-    ]
+	"uri": "http://www.contractawards.eu/open-contracting/api/v1/record-package/{filters}",
+	"publisher": {
+		"name": "Development Gateway"
+	},
+	"license": "http://opensource.org/licenses/MIT",
+	"publishedDate": "2006-09-14T04:28:58-0400",
+	"packages": [
+		"http://www.contractawards.eu/open-contracting/api/v1/release-package/releaseID1",
+		"http://www.contractawards.eu/open-contracting/api/v1/release-package/releaseID2",
+		"http://www.contractawards.eu/open-contracting/api/v1/release-package/releaseID3"
+	],
+	"records": [
+		{
+			"ocid": "1234-5678",
+			"releases": [
+				{
+					"ocid": "1234-5678",
+					"releaseID": "releaseID-1234-5678",
+					"releaseDate": "2006-09-14T04:28:58-0400",
+					"releaseTag": "awardNotice",
+					"language": "en",
+					"formationType": "tender",
+					"buyer": {
+						"id": {
+							"name": "CONSEIL GÉNÉRAL DE L'YONNE",
+							"uid": "6490828",
+							"uri": "http://www.dgmarket.com/tenders/adminShowBuyer.do?buyerId=6490828"
+						},
+						"address": {
+							"locality": "Paris",
+							"region": "Paris",
+							"country-name": "France"
+						}
+					},
+					"tender": {
+						"tenderID": "1219083",
+						"notice": {
+							"id": "1234-5678",
+							"uri": "http://www.dgmarket.com/tenders/np-notice.do?noticeId=1219083",
+							"publishedDate": "2006-03-21T00:00:00-0500"
+						},
+						"itemsToBeProcured": [{
+							"description": "Construction work",
+							"classificationScheme": "CPV",
+							"classificationID": "45000000",
+							"classificationDescription": "Construction work"
+						}],
+						"totalValue": {
+							"amount": 100000,
+							"currency": "EUR"
+						},
+						"numberOfBids": 3
+					},
+					"awards": [{
+						"awardID": "1129358",
+						"notice": {
+							"id": "1234-5678",
+							"uri": "http://www.dgmarket.com/tenders/np-notice.do?noticeId=1219083",
+							"publishedDate": "2006-03-21T00:00:00-0500"
+						},
+						"awardValue": {
+							"amount": 100000,
+							"currency": "EUR"
+						},
+						"suppliers": [{
+							"id": {
+								"name": "Divers organismes",
+								"uid": "123",
+								"uri": "http://www.contractawards.eu/#!supplier=Divers+organismes"
+							},
+							"address": {
+								"locality": "Bucharest",
+								"region": "Ilfov",
+								"country-name": "Romania"
+							}
+						}],
+						"itemsAwarded": [{
+							"description": "Construction work",
+							"classificationScheme": "CPV",
+							"classificationID": "45000000",
+							"classificationDescription": "Construction work"
+						}]
+					}]
+				}
+			]
+		}
+	]
 }
 ```
