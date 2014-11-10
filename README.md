@@ -1,11 +1,13 @@
 OCDS API
 ========
 
-**Open Contracting Data Standard** aims to allow information to be shared as structured data and to provide a transparent way to analyze all the phases of a contract from planning to completion. By creating the *OCDS API* we are offering developers the possibility to create with open contracting data reports and applications that can identify trends in public contracts.
+The **Open Contracting Data Standard** allows information to be shared as structured data and provides a transparent way to analyze all phases of a contract from planning to completion. By creating the *OCDS API* we are offering developers the possibility to use open contracting data to make reports and applications that can identify trends in public contracts.
 
 This document provides a description of the APIs and examples of their use.
 
-1. API conventions
+**Sections:**
+
+1. API Conventions
 2. Records API
 3. Releases API
 4. Metadata API
@@ -16,10 +18,10 @@ This document provides a description of the APIs and examples of their use.
 ## 1. API Conventions
 
 ### Authentication and Usage Limits
-OCDS API doesn’t require any kind of authentication.Users can send as many requests as they want, the only limitation will be the number of records returned; in this way we encourage developers to use pagination in order to iterate through all of the requested data.
+The OCDS API doesn't require any kind of authentication. Users can send as many requests as they want; the only limitation will be on the number of records returned. We encourage developers to use pagination to iterate through requested data.
 
 ### JSON Callbacks
-**OCDS API** is explorable via a browser address bar for testing purposes. In a real application you can use AJAX or JSON-P callbacks in order to query the system and *consume* the response:
+**OCDS API** is explorable via a browser address bar for testing purposes. In a real application, you can use AJAX or JSON-P callbacks to query the system and *consume* the response:
 
 ```
 $.ajax({
@@ -31,22 +33,22 @@ $.ajax({
 });
 ```
 
-*You should be aware that http://www.contractawards.eu web application supports the OCDS standard but it is not part of the standard*.
+*You should be aware that http://www.contractawards.eu web application supports the OCDS standard but is not part of the standard*.
 
 All requests should have the type **GET**.
 
-### OCDS Definitions
+### OCDS definitions
 Information about an Open Contracting Process may accumulate over time. As a result, the Open Contracting Data Standard provides for two kinds of data:
 
-1. **Contracting release** - Information pertaining to a particular stage in the contracting process - such as tender notices, award notices, or details of a finalized contract.
+1. **Contracting release** - Information pertaining to a particular stage in the contracting process, such as tender notices, award notices, or details of a finalized contract.
 
-2. **Contracting record** - A snapshot of all the key elements of a unique contracting process, including its planning, formation, performance and completion.
+2. **Contracting record** - A snapshot of all the key elements of a unique contracting process, including its planning, formation, performance, and completion.
 
-Both **contracting releases** and **contracting records** are provided within data packages, containing meta-data about the publisher, publication data and licensing information.
+Both **contracting releases** and **contracting records** are provided within data packages, containing meta-data about the publisher, publication data, and licensing information.
 
 ## 2. Records API
 
-This API can be used to generate record packages or to retrieve individual *record* information. With the help of *filters* users can slice the data and drill down the results.
+This API can be used to generate record packages or to retrieve individual *record* information. With the help of *filters*, users can slice the data and drill down the results.
 
 ### Basic call and parameters
 
@@ -60,49 +62,53 @@ The following parameters (```filters```) are supported:
 * ```year``` - Year, e.g., *2012*
 * ```contractType``` - Contract Type, e.g., *Service contract*
 * ```awardCriteria``` - Award criteria, e.g, *Lowest price*
-* ```buyerCountry``` - 2 digits country code, e.g., *de* for Germany 
-* ```supplierCountry``` - 2 digits country code, e.g., *it* for Italy
+* ```buyerCountry``` - 2 digit country code, e.g., *de* for Germany
+* ```supplierCountry``` - 2 digit country code, e.g., *it* for Italy
 
 Please note that the last 6 criteria (```item```, ```year```, ```contractType ```, ```awardCriteria```, ```buyerCountry``` and ```supplierCountry```) need to be valid. You can check the validity by invoking the **Metadata API**.
 
-**Request pagination**
+### Request pagination
 
 Each request accepts the following parameters:
-* ```page``` – page number
-* ```pageSize``` – number of records per page; the default value is 100 and it cannot be greater than 1000
+* ```page``` - page number
+* ```pageSize``` - number of records per page; the default value is 100 and cannot be greater than 1000
 
-For example,
+For example:
 ```
 http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2008&buyerCountry=Germany&page=10&pageSize=20
 ```
 
-The example above returns the 10th 20-record page.
+* The example above returns the 10th 20-record page.
 
 ```
 http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2008&supplierCountry=France&page=1&pageSize=50
 ```
 
+* The example above returns the first 50-record page.
+
 ```
 http://www.contractawards.eu/open-contracting/api/v1/record-package?item={"classificationScheme": "CPV", "classificationID": "45000000", "classificationDescription": "Construction work"}&procedure=Service contract&year=2012&page=1&pageSize=1000
 ```
 
-### Limitation of the Filter API implementation
+* The example above returns the first 1000-record page.
 
-1.	Supplier name and buyer name reset all other parameters, in other words if one of the ```supplier``` or ```buyer``` parameter is present all other parameters will be ignored.
-2.	All other parameters (```item```, ```year```, ```procedure```, ```awardCriteria```, ```buyerCountry```, ```supplierCountry```) can be combined in any order with the condition that at least two criteria from the aforementioned list be used.
+### Limitations of the Filter API Implementation
+
+1.	Supplier name and buyer name reset all other parameters; in other words, if one of the ```supplier``` or ```buyer``` parameters is present, all other parameters will be ignored.
+2.	All other parameters (```item```, ```year```, ```procedure```, ```awardCriteria```, ```buyerCountry```, ```supplierCountry```) can be combined in any order, with the condition that at least two criteria from the aforementioned list be used.
 
 ### Release content returned by the API
 There two ways to include a release into a record package:
 * as a URI pointing to the release
-* as the actual release content by inserting ```embed=true``` parameter.
+* as the actual release content by inserting ```embed=true``` parameter
 
-For example, the following request would retrieve just basic information about a record package, with release URIs that can be called to obtain the actual release information:
+For example, the following request would retrieve basic information about a record package with release URIs that can be called to obtain the actual release information:
 
 ```
 GET http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2012&embed=true
 
 {
-	"uri": "http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2012”,
+	"uri": "http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2012",
 	"publisher": {
 		"name": "Development Gateway"
 	},
@@ -127,21 +133,23 @@ GET http://www.contractawards.eu/open-contracting/api/v1/record-package?year=201
 ```
 
 ### Obtaining a single record
-Each record has a unique **Open Contracting ID** called ```ocid``` (http://ocds.open-contracting.org/standard/r/0__3__3/#conceptual-model). A particular record can be retrieves via the following API:
+Each record has a unique **Open Contracting ID** called ```ocid``` (http://ocds.open-contracting.org/standard/r/0__3__3/#conceptual-model).
+
+A particular record can be retrieves via the following API:
 
 ```
 http://www.contractawards.eu/open-contracting/api/v1/record?recordId=<ocid>
 ```
 
 ### Pretty print format
-By default, the API provides pretty printing of the JSON output. In a production application a user can reduce the cost of  data transfer by using the parameter ```pretty=false``` in order to remove all the white spaces from the response.
+By default, the API provides pretty printing of the JSON output. In a production application, a user can reduce the cost of  data transfer by using the parameter ```pretty=false``` to remove all white spaces from the response.
 
 ### Records API Response
 Records contain the following information:
 
 * ```uri``` - URI of the records package
 * ```publisher``` - information that uniquely identifies the publisher of this package
-* ```publishedDate``` -package publication date
+* ```publishedDate``` - package publication date
 * ```packages``` - a list of URIs of release packages included in the record package
 * ```records``` - records included in this records package
 
@@ -156,7 +164,7 @@ Obtain a release package:
 http://www.contractawards.eu/open-contracting/api/v1/release-package?releaseId=<id>
 ```
 
-Obtain an individual releaze:
+Obtain an individual release:
 ```
 http://www.contractawards.eu/open-contracting/api/v1/release?releaseId=<id>
 ```
@@ -166,37 +174,37 @@ http://www.contractawards.eu/open-contracting/api/v1/release?releaseId=<id>
 ### Release API Response
 Releases contain the following information:
 
-* ```ocid``` - A unique identifier of an Open Contracting Process (the same ID can be used for ```noticeID``` and ```TenderID``` should always have the same value as OCID)
-* ```releaseID``` - A unique release identifier
-* ```releaseDate``` - The date this information was released
-* ```releaseTag``` - A tag that helps to identify the type of data in the dataset (e.e, *awardNotice*)
-* ```language``` - The default language of the data returned
-* ```formationType``` - String specifying the type of formation process used for this contract(should be *tender*)
-* ```buyer``` - An entity that procures goods, works or services.
+* ```ocid``` - a unique identifier of an Open Contracting Process (the same ID can be used for ```noticeID```, and ```TenderID``` should always have the same value as OCID)
+* ```releaseID``` - a unique release identifier
+* ```releaseDate``` - the date this information was released
+* ```releaseTag``` - a tag that helps to identify the type of data in the dataset (i.e., *awardNotice*)
+* ```language``` - the default language of the data returned
+* ```formationType``` - string specifying the type of formation process used for this contract (should be *tender*)
+* ```buyer``` - an entity that procures goods, works, or services
 	* **id**
 		* *name*
 		* *uid*
 		* *uri*
-	* **address** - An Address following the convention of http://microformats.org/wiki/hcard
+	* **address** - an Address following the convention of http://microformats.org/wiki/hcard
 		* *locality*
 		* *region*
 		* *country-name*
-* ```tender``` - Activities undertaken in order to enter into a contract.
-	* **tenderID** - TenderID should always be the same as the OCID.
-	* **notice** - A notice is a public document that notifies the public about various stages of the contracting process
+* ```tender``` - activities undertaken in order to enter into a contract
+	* **tenderID** - TenderID should always be the same as the OCID
+	* **notice** - a notice is a public document that informs the public about various stages of the contracting process
 		* *id*
 		* *uri*
 		* *publishedDate*
-	* **itemsToBeProcured** - The goods and services to be purchased
+	* **itemsToBeProcured** - the goods and services to be purchased
 		* *description*
 		* *classificationScheme*
 		* *classificationID*
 		* *classificationDescription*
-	* **totalValue** - The total estimated value of the procurement
+	* **totalValue** - total estimated value of the procurement
 		* *amount*
 		* *currency*
-	* **numberOfBids** - The number of unique bidders who participated in the tender
-* ```awards``` - Information related to the award phase of the contracting process
+	* **numberOfBids** - number of unique bidders who participated in the tender
+* ```awards``` - information related to the award phase of the contracting process
 	* **awardID**
 	* **notice**
 		* *id*
@@ -205,7 +213,7 @@ Releases contain the following information:
 	* **awardValue**
 		* *amount*
 		* *currency*
-	* **suppliers** - The awarded suppliers
+	* **suppliers** - the awarded suppliers
 		* *id*
 			* *name*
 			* *uid*
@@ -214,18 +222,18 @@ Releases contain the following information:
 			* *locality*
 			* *region*
 			* *country-name*
-	* **itemsAwarded** - The goods and services included in the awarded contract, broken into line items wherever possible
+	* **itemsAwarded** - goods and services included in the awarded contract, broken into line items wherever possible
 		* *description*
 		* *classificationScheme*
 		* *classificationID*
 		* *classificationDescription*
-* ```planning``` - Information from the planning phase of the contracting process.
+* ```planning``` - information from the planning phase of the contracting process
 	* **budgetID**
 	* **budgetAmount**
 	* **publicHearingNotice**
 	* **strategicJustificiation**
 	* **anticipatedMilestones**
-* ```contracts``` - Information from the contract creation phase of the procurement process.
+* ```contracts``` - information from the contract creation phase of the procurement process
 	* **contractID**
 	* **awardID**
 	* **contractPeriod**
@@ -233,7 +241,7 @@ Releases contain the following information:
 	* **signatureDate**
 	* **itemsContracted**
 	* **attachments**
-* ```performance``` - Information related to the implementation of the contract in accordance with the obligations laid out therein.
+* ```performance``` - information related to the implementation of the contract in accordance with the obligations laid out therein
 	* **transactionDataPackageURI**
 	* **transactionID**
 	* **transactionAmount**
@@ -249,7 +257,7 @@ This API returns information about ```filters``` that can be used to query **Rec
 GET /open-contracting/api/v1/<dataset>
 ```
 
-This call returns information about a ```dataset``` and all valid values that can be used to query it. If a value is not returned, for example, year 2001, then it means that there are no contracts published in 2001.
+This call returns information about a ```dataset``` and all valid values that can be used to query it. If a value is not returned - for example, year 2001 - it means there are no contracts published in 2001.
 
 Possible ```dataset``` values include:
 * ```years``` - returns an array of valid years
@@ -282,11 +290,11 @@ $.ajax({
 
 ## 5. Versioning
 
-Change is inevitable, and the versioning API helps iterate faster and prevent invalid requests. This also allows to adopt new version of OCDS standard while continuing to support old API versions for a some time. Versions are identified as ```/api/v1/```, ```api/v2/``` and so on.
+Change is inevitable, and the versioning API helps iterate faster and prevent invalid requests. This also allows the adoption of new versions of the OCDS standard while continuing to support old API versions for some time. Versions are identified as ```/api/v1/```, ```api/v2/```, and so on.
 
 ## 6. Errors
 
-In case of an error (on client or server side) a response will contain JSON error body that provides:  a useful error message, an error code, and the URL that caused the error. For example:
+In case of an error (on client or server side), a response will contain JSON error body that provides: a useful error message, an error code, and the URL that caused the error. For example:
 
 ```
 {
@@ -310,7 +318,7 @@ or
 			"url": "http://www.contractawards.eu/open-contracting/api/v1/record-package?year=2012"
 		}
 	]
-} 
+}
 ```
 
 ## 7. Examples
